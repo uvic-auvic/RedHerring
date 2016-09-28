@@ -1,0 +1,6 @@
+Header Sensitivity
+float32 forwardSensitivity
+float32 pitchSensitivity
+float32 rollSensitivity
+float32 yawSensitivity
+float32 ascentSensitivity

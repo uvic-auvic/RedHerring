@@ -1,0 +1,2 @@
+float32 UCDieTemperature
+float32 oilTemperature

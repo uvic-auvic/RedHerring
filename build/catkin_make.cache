@@ -1,0 +1,2 @@
+imu:imu_int:keyboard_interface:main_controller:motor_driver:thrusters
+-DCATKIN_DEVEL_PREFIX=/home/rosbox/control_code/devel -DCMAKE_INSTALL_PREFIX=/home/rosbox/control_code/install -G Unix Makefiles

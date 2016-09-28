@@ -1,0 +1,8 @@
+prefix=/home/rosbox/control_code/devel
+
+Name: imu
+Description: Description of imu
+Version: 0.0.0
+Cflags: -I/home/rosbox/control_code/devel/include -I/home/rosbox/control_code/src/imu/include -I/home/rosbox/control_code/src/imu/../../devel/include
+Libs: -L/home/rosbox/control_code/devel/lib 
+Requires: message_runtime
