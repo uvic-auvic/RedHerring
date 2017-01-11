@@ -1,8 +1,0 @@
-prefix=/home/rosbox/control_code/install
-
-Name: keyboard_interface
-Description: Description of keyboard_interface
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/rosbox/control_code/install/lib 
-Requires: 
