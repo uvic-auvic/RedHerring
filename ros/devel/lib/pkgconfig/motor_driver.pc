@@ -1,8 +1,0 @@
-prefix=/home/rosbox/control_code/devel
-
-Name: motor_driver
-Description: Description of motor_driver
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/rosbox/control_code/devel/lib 
-Requires: 
