@@ -26,6 +26,13 @@ sudo apt-get install "$PACKAGES"
 sudo rosdep init
 rosdep update
 
+# Replace symlink with file
+pushd ../ros/src
+FILENAME="CMakeLists.txt"
+FILE_LOC=`readlink -f $FILENAME`
+rm $FILENAME
+cp $FILE_LOC $FILENAME
+
 # Setup environment
 echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 source ~/.bashrc

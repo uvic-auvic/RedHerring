@@ -1,8 +1,5 @@
 ### ROS 
 ### These ignore concern the ROS catkin project
-
-# Devel files
 ros/devel/
-
-# Binary files
 ros/build/
+ros/src/CMakeLists.txt.*
