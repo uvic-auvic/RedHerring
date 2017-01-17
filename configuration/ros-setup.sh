@@ -32,6 +32,7 @@ FILENAME="CMakeLists.txt"
 FILE_LOC=`readlink -f $FILENAME`
 rm $FILENAME
 cp $FILE_LOC $FILENAME
+popd
 
 # Setup environment
 echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
