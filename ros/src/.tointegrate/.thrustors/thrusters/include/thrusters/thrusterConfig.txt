@@ -1,0 +1,17 @@
+base_command_;0
+baud_;19200
+downwardThrusterChannel_;1
+starboardThrusterChannel_;2
+portThrusterChannel_;3
+portUpwardThrusterChannel_;4
+starboardUpwardThrusterChannel_;5
+throttleLockout_;1
+temperatureSendTime_;5000
+thrusterREVUpper_;-46
+thrusterREVLower_;-76
+thrusterFWDUpper_;90
+thrusterFWDLower_;-26
+forwardTrim_;0
+pitchTrim_;0
+rollTrim_;0
+yawTrim_;0

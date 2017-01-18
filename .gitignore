@@ -2,4 +2,5 @@
 ### These ignore concern the ROS catkin project
 ros/devel/
 ros/build/
-ros/src/CMakeLists.txt*
+ros/src/CMakeLists.txt
+ros/src/CMakeLists.txt.*

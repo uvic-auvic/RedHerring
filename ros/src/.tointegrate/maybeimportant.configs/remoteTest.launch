@@ -1,0 +1,23 @@
+<launch>
+
+    <node name="thruster_node" pkg="thrusters" type="thruster_node" />
+    <node name="lights_node" pkg="lights" type="lights_node" />
+    <node name="redgui" pkg="redgui" type="redgui" />
+
+    <machine name="auv01" address="192.168.1.162" user="googly" password="auvicauv0169" env-loader="/home/googly/catkin_ws/env.sh" default="true" />
+    <node machine="auv01" name="turtleTalker" pkg="turtleDriver" type="turtleTalker" />
+
+      <node machine="auv01" name="usb_cam" pkg="usb_cam" type="usb_cam_node" output="screen" >
+        <param name="video_device" value="/dev/video0" />
+        <param name="image_width" value="640" />
+        <param name="image_height" value="480" />
+        <param name="pixel_format" value="mjpeg" />
+        <param name="camera_frame_id" value="usb_cam" />
+        <param name="io_method" value="mmap"/>
+      </node>
+      <node machine="auv01" name="image_view" pkg="image_view" type="image_view" respawn="false" output="screen">
+        <remap from="image" to="/usb_cam/image_raw"/>
+        <param name="autosize" value="true" />
+      </node>
+
+</launch>
