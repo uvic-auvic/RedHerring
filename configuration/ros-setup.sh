@@ -20,7 +20,7 @@ do
 done < "ros-packages.list"
 
 # Install all the extra packages
-sudo apt-get install "$PACKAGES"
+sudo apt-get install $PACKAGES
 
 # Initialize ROSDEP
 sudo rosdep init
