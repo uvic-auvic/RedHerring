@@ -1,5 +1,0 @@
-float32 forwardThruster
-float32 pitchThruster
-float32 rollThruster
-float32 yawThruster
-float32 ascent
