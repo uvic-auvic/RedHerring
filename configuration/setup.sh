@@ -13,14 +13,8 @@ sudo apt-get update
 # Install whole ROS desktop application
 sudo apt-get install ros-indigo-desktop-full
 
-# List all the packages that we need and put it into proper apt-get format
-while read -r line
-do
-    PACKAGES="$PACKAGES ros-indigo-$line"
-done < "ros-packages.list"
-
-# Install all the extra packages
-sudo apt-get install $PACKAGES
+# Install all the required packages
+source package-setup.sh
 
 # Initialize ROSDEP
 sudo rosdep init
