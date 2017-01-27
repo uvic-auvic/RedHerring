@@ -117,6 +117,12 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     if ( ui.checkbox_remember_settings->isChecked() ) {
         on_button_connect_clicked(true);
     }
+
+    /*
+     * Enable all the views
+     */
+    ui.ControlsGroupBox->setEnabled(true);
+    ui.joystick_tab->setEnabled(true);
 }
 
 MainWindow::~MainWindow() {}
@@ -629,11 +635,6 @@ void MainWindow::ReadSettings() {
     	//ui.line_edit_topic->setEnabled(false);
     }
 
-    /*
-     * Test shit
-     */
-    //qDebug() << ui.ControlsGroupBox->isEnabled();
-    ui.ControlsGroupBox->setEnabled(true);
 }
 
 void MainWindow::WriteSettings() {
