@@ -64,17 +64,17 @@ bool QNode::init() {
     image_transport::ImageTransport it(n);
 	// Add your ros communications here.
     //TODO: Uncomment when times comes. Also maybe convert topic method to service calls
-    /*
-    thrusterSensitivity_publisher = n.advertise<thrusters::Sensitivity>("/GUI/thrusterSensitivity", 4);
-    thrusterValue_subscriber = n.subscribe("/GUI/thrusterValues", 1, &QNode::thrusterValueCb, this);
-    chatter_subscriber = n.subscribe<std_msgs::String>("/GUI/general", 1, &QNode::chatterCb, this);
-    thrusterTemperature_subscriber = n.subscribe("/input/thrusterTemperature", 1, &QNode::temperatureCb, this);
-    camera_subscriber = it.subscribe("/GUI/camera", 1, &QNode::imageCb, this);
-    lightState_publisher = n.advertise<std_msgs::Bool>("/GUI/lights", 1);
-    throttleLockout_publisher = n.advertise<std_msgs::Bool>("/GUI/throttleLockout",1);
-    GUI_ROV_to_AUV_pub_ = n.advertise<std_msgs::Int16>("/GUI/ROVtoAUV", 4);
-    GUI_record_mode_pub_ = n.advertise<std_msgs::Int16>("/GUI/recordingMode", 4);
-    */
+
+    //thrusterSensitivity_publisher = n.advertise<thrusters::Sensitivity>("/GUI/thrusterSensitivity", 4);
+    //thrusterValue_subscriber = n.subscribe("/GUI/thrusterValues", 1, &QNode::thrusterValueCb, this);
+    //chatter_subscriber = n.subscribe<std_msgs::String>("/GUI/general", 1, &QNode::chatterCb, this);
+    //thrusterTemperature_subscriber = n.subscribe("/input/thrusterTemperature", 1, &QNode::temperatureCb, this);
+    //camera_subscriber = it.subscribe("/GUI/camera", 1, &QNode::imageCb, this);
+    //lightState_publisher = n.advertise<std_msgs::Bool>("/GUI/lights", 1);
+    //throttleLockout_publisher = n.advertise<std_msgs::Bool>("/GUI/throttleLockout",1);
+    //GUI_ROV_to_AUV_pub_ = n.advertise<std_msgs::Int16>("/GUI/ROVtoAUV", 4);
+    //GUI_record_mode_pub_ = n.advertise<std_msgs::Int16>("/GUI/recordingMode", 4);
+
 
     /*
      * Configuration File Values
@@ -97,27 +97,27 @@ bool QNode::init() {
             line = strtok(lineChar, ";");
             if(line == "_listViewThreshold"){
                     line = strtok(NULL,";");
-                    //_listViewThreshold = strtol(line.c_str(),0,10);
+                    _listViewThreshold = strtol(line.c_str(),0,10);
             }
             else if(line == "forwardSensitivity"){
                     line = strtok(NULL,";");
-                    //sensitivityData_.forwardSensitivity = strtol(line.c_str(),0,10);
+                    sensitivityData_.forwardSensitivity = strtol(line.c_str(),0,10);
             }
             else if(line == "pitchSensitivity"){
                     line = strtok(NULL,";");
-                    //sensitivityData_.pitchSensitivity = strtol(line.c_str(),0,10);
+                    sensitivityData_.pitchSensitivity = strtol(line.c_str(),0,10);
             }
             else if(line == "rollSensitivity"){
                     line = strtok(NULL,";");
-                    //sensitivityData_.rollSensitivity = strtol(line.c_str(),0,10);
+                    sensitivityData_.rollSensitivity = strtol(line.c_str(),0,10);
             }
             else if(line == "yawSensitivity"){
                     line = strtok(NULL,";");
-                    //sensitivityData_.yawSensitivity = strtol(line.c_str(),0,10);
+                    sensitivityData_.yawSensitivity = strtol(line.c_str(),0,10);
             }
             else if(line == "ascentSensitivity"){
                     line = strtok(NULL,";");
-                    //sensitivityData_.ascentSensitivity = strtol(line.c_str(),0,10);
+                    sensitivityData_.ascentSensitivity = strtol(line.c_str(),0,10);
             }
             else if(line == "ROVtoAUVcontrolMode"){
                 line = strtok(NULL,";");
@@ -133,17 +133,17 @@ bool QNode::init() {
     {
        ROS_INFO("GUI Config file not found... Using defaults.");
        _listViewThreshold = 50;
-       /*
+
        sensitivityData_.forwardSensitivity = 0;
        sensitivityData_.pitchSensitivity = 0;
        sensitivityData_.rollSensitivity = 0;
        sensitivityData_.yawSensitivity = 0;
        sensitivityData_.ascentSensitivity = 0;
-       */
+
     }
 
     start();
-    //QNode::sensitivityPublish();
+    QNode::sensitivityPublish();
 	return true;
 }
 
@@ -160,15 +160,16 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
 	ros::NodeHandle n;
     image_transport::ImageTransport it(n);
 	// Add your ros communications here.
-    //TODO:    thrusterSensitivity_publisher = n.advertise<thrusters::Sensitivity>("/GUI/thrusterSensitivity", 10);
-    //TODO: thrusterTemperature_subscriber = n.subscribe("/input/thrusterTemperature", 1, &QNode::temperatureCb, this);
-    chatter_subscriber = n.subscribe<std_msgs::String>("/GUI/general", 1, &QNode::chatterCb, this);
-    camera_subscriber = it.subscribe("/GUI/camera", 1, &QNode::imageCb, this);
-    // TODO: thrusterValue_subscriber = n.subscribe("/GUI/thrusterValues", 10, &QNode::thrusterValueCb, this);
-    lightState_publisher = n.advertise<std_msgs::Bool>("/GUI/lights", 1);
-    // TODO: throttleLockout_publisher = n.advertise<std_msgs::Bool>("/GUI/throttleLockout",1);
-    GUI_ROV_to_AUV_pub_ = n.advertise<std_msgs::Int16>("/GUI/ROVtoAUV", 4);
-    GUI_record_mode_pub_ = n.advertise<std_msgs::Int16>("/GUI/recordingMode", 4);
+    //thrusterSensitivity_publisher = n.advertise<thrusters::Sensitivity>("/GUI/thrusterSensitivity", 10);
+    // Commenting out all subscribers because there is nothing to subscribe to
+    //thrusterTemperature_subscriber = n.subscribe("/input/thrusterTemperature", 1, &QNode::temperatureCb, this);
+    //chatter_subscriber = n.subscribe<std_msgs::String>("/GUI/general", 1, &QNode::chatterCb, this);
+    //camera_subscriber = it.subscribe("/GUI/camera", 1, &QNode::imageCb, this);
+    // thrusterValue_subscriber = n.subscribe("/GUI/thrusterValues", 10, &QNode::thrusterValueCb, this);
+    //lightState_publisher = n.advertise<std_msgs::Bool>("/GUI/lights", 1);
+    //throttleLockout_publisher = n.advertise<std_msgs::Bool>("/GUI/throttleLockout",1);
+    //GUI_ROV_to_AUV_pub_ = n.advertise<std_msgs::Int16>("/GUI/ROVtoAUV", 4);
+    //GUI_record_mode_pub_ = n.advertise<std_msgs::Int16>("/GUI/recordingMode", 4);
     /*
      * Configuration File Values
      */
@@ -179,8 +180,6 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
     rollInvert_ = false;
     yawInvert_ = false;
 
-    //HOLY FUCK KYLE.T! Why didnt you make this a singular function instead of copying it over and over again
-    // TODO: replace with library
     std::ifstream guiConfigFile;
     std::string fileLocation("~/Github_Projects/RedHerring/ros/src/redgui/include/redgui/redguiConfig.txt");//( (std::string(getenv("HOME")) + "/ROV02/src/redgui/include/redgui/redguiConfig.txt") );
     guiConfigFile.open(fileLocation.c_str());
@@ -197,19 +196,19 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
             }
             else if(line == "forwardSensitivity"){
                     line = strtok(NULL,";");
-                    //sensitivityData_.forwardSensitivity = strtol(line.c_str(),0,10);
+                    sensitivityData_.forwardSensitivity = strtol(line.c_str(),0,10);
             }
             else if(line == "pitchSensitivity"){
                     line = strtok(NULL,";");
-                    //sensitivityData_.pitchSensitivity = strtol(line.c_str(),0,10);
+                    sensitivityData_.pitchSensitivity = strtol(line.c_str(),0,10);
             }
             else if(line == "rollSensitivity"){
                     line = strtok(NULL,";");
-                    //sensitivityData_.rollSensitivity = strtol(line.c_str(),0,10);
+                    sensitivityData_.rollSensitivity = strtol(line.c_str(),0,10);
             }
             else if(line == "yawSensitivity"){
                     line = strtok(NULL,";");
-                    //sensitivityData_.yawSensitivity = strtol(line.c_str(),0,10);
+                    sensitivityData_.yawSensitivity = strtol(line.c_str(),0,10);
             }
             else if(line == "ascentSensitivity"){
                     line = strtok(NULL,";");
@@ -230,16 +229,16 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
     {
        ROS_INFO("GUI Config file not found... Using defaults.");
        _listViewThreshold = 50;
-       /*
+
        sensitivityData_.forwardSensitivity = 10;
        sensitivityData_.pitchSensitivity = 10;
        sensitivityData_.rollSensitivity = 10;
        sensitivityData_.yawSensitivity = 10;
        sensitivityData_.ascentSensitivity = 10;
-       */
+
     }
     start();
-    //QNode::sensitivityPublish();
+    QNode::sensitivityPublish();
 	return true;
 }
 
@@ -247,7 +246,7 @@ void QNode::run() {
 
     ros::spin();
     std::cout << "Ros shutdown, proceeding to close the gui." << std::endl;
-    Q_EMIT rosShutdown(); // used to signal the gui for a shutdown (useful to roslaunch
+    Q_EMIT rosShutdown(); // used to signal the gui for a shutdown (useful to roslaunch)
 }
 
 
@@ -314,7 +313,7 @@ void QNode::chatterCb(const std_msgs::String::ConstPtr& msg){
     }
 }
 
-  /*
+
 void QNode::forwardSensitivity(int value)
 {
 
@@ -375,12 +374,12 @@ void QNode::ascentSensitivity(int value)
 void QNode::sensitivityPublish()
 {
 
-    thrusterSensitivity_publisher.publish(sensitivityData_);
+    //thrusterSensitivity_publisher.publish(sensitivityData_);
     return;
 
 }
 
-void QNode::thrusterValueCb(const thrusters::thrusterValues thrustValues)
+void QNode::thrusterValueCb(thrusterValues thrustValues)
 {
 
     Q_EMIT thrusterForwardSignal((float)thrustValues.forwardThruster );
@@ -392,12 +391,12 @@ void QNode::thrusterValueCb(const thrusters::thrusterValues thrustValues)
 
 }
 
-void QNode::temperatureCb(const thrusters::thrusterTemperatures temperatures)
+void QNode::temperatureCb(thrusterTemperatures temperatures)
 {
     Q_EMIT UCDieTemperatureSignal(temperatures.UCDieTemperature);
     Q_EMIT OILTemperatureSignal(temperatures.oilTemperature);
 }
-  */
+
 
 void QNode::lightChange(bool lightState)
 {
@@ -407,7 +406,7 @@ void QNode::lightChange(bool lightState)
     return;
 }
 
-  /*
+
 void QNode::throttleLockoutChange(bool lockoutState)
 {
     std_msgs::Bool boolLockoutState;
@@ -464,7 +463,7 @@ void QNode::yawInvertChange(bool invertState)
     return;
 }
 
-  */
+
 
 void QNode::updateControlMode(std::string controlMode)
 {

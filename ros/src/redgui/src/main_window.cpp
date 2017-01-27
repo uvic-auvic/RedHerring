@@ -38,7 +38,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 
     ReadSettings();
 	setWindowIcon(QIcon(":/images/icon.png"));
-	ui.tab_manager->setCurrentIndex(0); // ensure the first tab is showing - qt-designer should have this already hardwired, but often loses it (settings?).
+    ui.tab_manager->setCurrentIndex(0); // ensure the first tab is showing - qt-designer should have this already hardwired, but often loses it (settings?).
     QObject::connect(&qnode, SIGNAL(rosShutdown()), this, SLOT(close()));
 
 	/*********************
@@ -55,29 +55,30 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     /*
      * Thruster Sensitivities
      */
-    /*
+
     QObject::connect(ui.forwardFactor, SIGNAL(valueChanged(int)), this, SLOT(updateForwardSensitivity(int)));
     QObject::connect(ui.pitchFactor, SIGNAL(valueChanged(int)), this, SLOT(updatePitchSensitivity(int)));
     QObject::connect(ui.rollFactor, SIGNAL(valueChanged(int)), this, SLOT(updateRollSensitivity(int)));
     QObject::connect(ui.yawFactor, SIGNAL(valueChanged(int)), this, SLOT(updateYawSensitivity(int)));
     QObject::connect(ui.ascentFactor, SIGNAL(valueChanged(int)), this, SLOT(updateAscentSensitivity(int)));
-    */
+
 
     /*
      * Thruster Values
      */
-    /*
+
     QObject::connect(&qnode, SIGNAL(thrusterForwardSignal(float)), this, SLOT(updateForwardThrusterBar(float)));
     QObject::connect(&qnode, SIGNAL(thrusterPitchSignal(float)), this, SLOT(updatePitchThrusterBar(float)));
     QObject::connect(&qnode, SIGNAL(thrusterRollSignal(float)), this, SLOT(updateRollThrusterBar(float)));
     QObject::connect(&qnode, SIGNAL(thrusterYawSignal(float)), this, SLOT(updateYawThrusterBar(float)));
     QObject::connect(&qnode, SIGNAL(thrusterAscentSignal(float)), this, SLOT(updateAscentThrusterBar(float)));
-    */
+
 
     /*
      * Thruster Lockout - autofilled
      */
     //QObject::connect(ui.lightsPushButton, SIGNAL(toggled(bool)), this, SLOT(on_lightsPushButton_toggled(bool)));
+
     /*
      * Thruster control mode (AUV or ROV)
      */
@@ -89,15 +90,15 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     /*
      *  Temperature Values
      */
-    /*
+
     QObject::connect(&qnode, SIGNAL(UCDieTemperatureSignal(float)), this, SLOT(updateUCDieTemperatureLCD(float)));
     QObject::connect(&qnode, SIGNAL(OILTemperatureSignal(float)), this, SLOT(updateOILTemperatureLCD(float)));
-    */
+
 
     /*
      * Trim stuff
      */
-    /*
+
     QObject::connect(ui.forwardTrimHorizontalSlider, SIGNAL(valueChanged(int)), this, SLOT(updateForwardTrimSliderText(int)));
     QObject::connect(ui.forwardTrimLineEdit, SIGNAL(textChanged(QString)), this, SLOT(updateForwardTrimSliderPos(QString)));
 
@@ -109,7 +110,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 
     QObject::connect(ui.rollTrimHorizontalSlider, SIGNAL(valueChanged(int)), this, SLOT(updateRollTrimSliderText(int)));
     QObject::connect(ui.rollTrimLineEdit, SIGNAL(textChanged(QString)), this, SLOT(updateRollTrimSliderPos(QString)));
-    */
+
     /*********************
     ** Auto Start
     **********************/
@@ -137,7 +138,7 @@ void MainWindow::showNoMasterMessage() {
  */
 
 void MainWindow::on_button_connect_clicked(bool check ) {
-	if ( ui.checkbox_use_environment->isChecked() ) {
+    if ( ui.checkbox_use_environment->isChecked() ) {
 		if ( !qnode.init() ) {
 			showNoMasterMessage();
 		} else {
@@ -157,13 +158,14 @@ void MainWindow::on_button_connect_clicked(bool check ) {
             ui.throttleLockoutCheckBox->setEnabled(true);
             ui.joystick_tab->setEnabled(true);
             
-            //qnode.throttleLockoutChange(true);
-            //ui.forwardFactor->setValue(qnode.sensitivityData("forwardSensitivity"));
-            //ui.pitchFactor->setValue(qnode.sensitivityData("pitchSensitivity"));
-            //ui.rollFactor->setValue(qnode.sensitivityData("rollSensitivity"));
-            //ui.yawFactor->setValue(qnode.sensitivityData("yawSensitivity"));
-            //ui.ascentFactor->setValue(qnode.sensitivityData("ascentSensitivity"));
-            //qnode.sensitivityPublish();
+            qnode.throttleLockoutChange(true);
+            ui.forwardFactor->setValue(qnode.sensitivityData("forwardSensitivity"));
+            ui.pitchFactor->setValue(qnode.sensitivityData("pitchSensitivity"));
+            ui.rollFactor->setValue(qnode.sensitivityData("rollSensitivity"));
+            ui.yawFactor->setValue(qnode.sensitivityData("yawSensitivity"));
+            ui.ascentFactor->setValue(qnode.sensitivityData("ascentSensitivity"));
+            qnode.sensitivityPublish();
+
             
             if(qnode.whichControlMode() == 2)
                 ui.ROVtoAUVPushButton->setText("AUV mode");
@@ -222,25 +224,25 @@ void MainWindow::updateForwardSensitivity(int value)
 void MainWindow::updatePitchSensitivity(int value)
 {
     ui.pitchFactor->setValue(value);
-    //qnode.pitchSensitivity(value);
+    qnode.pitchSensitivity(value);
 }
 
 void MainWindow::updateRollSensitivity(int value)
 {
     ui.rollFactor->setValue(value);
-    //qnode.rollSensitivity(value);
+    qnode.rollSensitivity(value);
 }
 
 void MainWindow::updateYawSensitivity(int value)
 {
     ui.yawFactor->setValue(value);
-    //qnode.yawSensitivity(value);
+    qnode.yawSensitivity(value);
 }
 
 void MainWindow::updateAscentSensitivity(int value)
 {
     ui.ascentFactor->setValue(value);
-    //qnode.ascentSensitivity(value);
+    qnode.ascentSensitivity(value);
 }
 /* Update Thruster Bars
  */
@@ -345,7 +347,7 @@ void MainWindow::on_throttleLockoutCheckBox_stateChanged(int state)
         ui.rollThrusterBar->setStyleSheet(locked);
         enabled = true;
     }
-    //qnode.throttleLockoutChange(enabled);
+    qnode.throttleLockoutChange(enabled);
 }
 
 /*
@@ -374,7 +376,7 @@ void MainWindow::on_forwardInvertCheckBox_stateChanged(int state)
     {
         enabled = true;
     }
-    //qnode.forwardInvertChange(enabled);
+    qnode.forwardInvertChange(enabled);
 }
 
 void MainWindow::on_pitchInvertCheckBox_stateChanged(int state)
@@ -387,7 +389,7 @@ void MainWindow::on_pitchInvertCheckBox_stateChanged(int state)
     {
         enabled = true;
     }
-    //qnode.pitchInvertChange(enabled);
+    qnode.pitchInvertChange(enabled);
 }
 
 void MainWindow::on_rollInvertCheckBox_stateChanged(int state)
@@ -400,7 +402,7 @@ void MainWindow::on_rollInvertCheckBox_stateChanged(int state)
     {
         enabled = true;
     }
-    //qnode.rollInvertChange(enabled);
+    qnode.rollInvertChange(enabled);
 }
 
 void MainWindow::on_yawInvertCheckBox_stateChanged(int state)
@@ -413,7 +415,7 @@ void MainWindow::on_yawInvertCheckBox_stateChanged(int state)
     {
         enabled = true;
     }
-    //qnode.yawInvertChange(enabled);
+    qnode.yawInvertChange(enabled);
 }
 
 /* Update Temperature Sensors displays
@@ -626,6 +628,12 @@ void MainWindow::ReadSettings() {
     	ui.line_edit_host->setEnabled(false);
     	//ui.line_edit_topic->setEnabled(false);
     }
+
+    /*
+     * Test shit
+     */
+    //qDebug() << ui.ControlsGroupBox->isEnabled();
+    ui.ControlsGroupBox->setEnabled(true);
 }
 
 void MainWindow::WriteSettings() {

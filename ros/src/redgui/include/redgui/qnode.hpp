@@ -52,6 +52,31 @@
 namespace redgui {
 
 /*****************************************************************************
+ * Structs
+ * **************************************************************************/
+struct sensitivityData {
+    float forwardSensitivity;
+    float pitchSensitivity;
+    float rollSensitivity;
+    float yawSensitivity;
+    float ascentSensitivity;
+    float forwardThrusterBar;
+};
+
+struct thrusterValues {
+    float forwardThruster;
+    float pitchThruster;
+    float rollThruster;
+    float yawThruster;
+    float ascent;
+};
+
+struct thrusterTemperatures {
+    float UCDieTemperature;
+    float oilTemperature;
+};
+
+/*****************************************************************************
 ** Class
 *****************************************************************************/
 
@@ -85,10 +110,15 @@ public:
     void yawSensitivity(int value);
     void ascentSensitivity(int value);
     void sensitivityPublish();
+
   //void thrusterValueCb(const thrusters::thrusterValues thrustValues);
+   //void temperatureCb(const thrusters::thrusterTemperatures temperatures);
+    // replaced old with new
+    void thrusterValueCb(thrusterValues thrustValues);
+    void temperatureCb(thrusterTemperatures temperatures);
+
     void lightChange(bool lightState);
     void throttleLockoutChange(bool lockoutState);
-  //void temperatureCb(const thrusters::thrusterTemperatures temperatures);
     int sensitivityData(std::string whichData);
     void forwardInvertChange(bool invertState);
     void rollInvertChange(bool invertState);
@@ -129,7 +159,13 @@ private:
     QStringListModel logging_model;
     QImage img;
     cv::Mat RGBframe;
-  //    thrusters::Sensitivity sensitivityData_;
+
+    // thrusters::Sensitivity sensitivityData_;
+    // replacing the thrustors sensitivityData with custom struct till other thing fixed
+    struct sensitivityData sensitivityData_;
+    struct thrusterValues thrustValues;
+    struct thrusterTemperatures temperatures;
+
     std_msgs::Int16 ROVtoAUVcontrolMode, videoRecordMode;
     bool forwardInvert_, rollInvert_, pitchInvert_, yawInvert_;
 
