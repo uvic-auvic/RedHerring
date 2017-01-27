@@ -2,6 +2,8 @@
 
 This repository contains the code that will be run on RedHerring, AUVic's Autonomous Underwater Vehicle (AUV)!
 
+![Alt text](/wiki/redherring.jpg?raw=true "RedHerring")
+
 ## Getting Started
 To get started developing for this project, follow the instructions below
 
