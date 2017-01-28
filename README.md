@@ -2,7 +2,7 @@
 
 This repository contains the code that will be run on RedHerring, AUVic's Autonomous Underwater Vehicle (AUV)!
 
-![Alt text](/wiki/images/redherring.jpg?raw=true "RedHerring")
+![RedHerring](/wiki/images/redherring.jpg?raw=true "RedHerring")
 
 ## Getting Started
 To get started developing for this project, follow the instructions below
@@ -12,5 +12,7 @@ To get started developing for this project, follow the instructions below
 [How we use Git](https://github.com/uvic-auvic/RedHerring/wiki/Git-Workflow)
 
 ## System Design
+
+![RedHerringSD](/wiki/images/rh-system-design.png?raw=true "SysDesign")
 
 ## External Links
