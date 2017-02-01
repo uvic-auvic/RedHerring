@@ -34,11 +34,14 @@
        <locale language="English" country="Australia"/>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
+      </property>
+      <property name="movable">
+       <bool>false</bool>
       </property>
       <widget class="QWidget" name="tab_status">
        <attribute name="title">
-        <string>Ros Communications</string>
+        <string>Communications</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
@@ -91,12 +94,17 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="cf">
+       <attribute name="title">
+        <string>Camera Feed</string>
+       </attribute>
+      </widget>
       <widget class="QWidget" name="joystick_tab">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <attribute name="title">
-        <string>Joystick Mapping</string>
+        <string>Control</string>
        </attribute>
        <widget class="QLabel" name="label_14">
         <property name="geometry">
@@ -398,6 +406,11 @@
         </property>
        </widget>
       </widget>
+      <widget class="QWidget" name="peripherals">
+       <attribute name="title">
+        <string>Peripherals</string>
+       </attribute>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -408,7 +421,7 @@
      <x>0</x>
      <y>0</y>
      <width>944</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
