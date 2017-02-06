@@ -32,14 +32,14 @@
 #include <fstream>
 
 /*****************************************************************************
-** Namespaces
-*****************************************************************************/
+ * Namespaces
+/*****************************************************************************/
 using namespace cv;
 namespace redgui {
 
 /*****************************************************************************
-** Implementation
-*****************************************************************************/
+ * Implementation
+/*****************************************************************************/
 
 QNode::QNode(int argc, char** argv ) :
 	init_argc(argc),
@@ -54,8 +54,9 @@ QNode::~QNode() {
 	wait();
 }
 
-bool QNode::init() {
-	ros::init(init_argc,init_argv,"redgui");
+bool QNode::init()
+{
+    ros::init(init_argc, init_argv, "redgui");
 	if ( ! ros::master::check() ) {
 		return false;
 	}
@@ -149,13 +150,18 @@ bool QNode::init() {
 
 bool QNode::init(const std::string &master_url, const std::string &host_url) {
     _listViewThreshold = 50;
+
 	std::map<std::string,std::string> remappings;
 	remappings["__master"] = master_url;
 	remappings["__hostname"] = host_url;
-	ros::init(remappings,"redgui");
+
+    //TODO: change back once fixed
+    ros::init(remappings,"redgui_remote");
+
 	if ( ! ros::master::check() ) {
 		return false;
 	}
+
 	ros::start(); // explicitly needed since our nodehandle is going out of scope.
 	ros::NodeHandle n;
     image_transport::ImageTransport it(n);
