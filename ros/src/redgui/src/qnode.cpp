@@ -408,7 +408,7 @@ void QNode::lightChange(bool lightState)
 {
     std_msgs::Bool boolLightState;
     boolLightState.data = lightState;
-    lightState_publisher.publish(boolLightState);
+    //lightState_publisher.publish(boolLightState);
     return;
 }
 
@@ -417,7 +417,7 @@ void QNode::throttleLockoutChange(bool lockoutState)
 {
     std_msgs::Bool boolLockoutState;
     boolLockoutState.data = lockoutState;
-    throttleLockout_publisher.publish(boolLockoutState);
+    //throttleLockout_publisher.publish(boolLockoutState);
     QNode::sensitivityPublish();
     return;
 }
