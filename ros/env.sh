@@ -28,3 +28,5 @@ echo "using ROS MASTER URI $HOST:$PORT"
 
 export ROS_MASTER_URI="http://$HOST:$PORT"
 export ROS_IP=$HOST
+
+source devel/setup.bash
