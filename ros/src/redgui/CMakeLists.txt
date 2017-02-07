@@ -4,6 +4,7 @@
 
 cmake_minimum_required(VERSION 2.8.0)
 project(redgui)
+set(CMAKE_CXX_FLAGS "-std=c++11")
 
 ##############################################################################
 # Catkin
@@ -47,7 +48,8 @@ file(GLOB_RECURSE QT_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINK
 # Binaries
 ##############################################################################
 find_package(OpenCV REQUIRED)
-find_package(thrusters)
+# TODO Uncomment later
+# find_package(thrusters)
 
 add_executable(redgui ${QT_SOURCES} ${QT_RESOURCES_CPP} ${QT_FORMS_HPP} ${QT_MOC_HPP})
 target_link_libraries(redgui ${QT_LIBRARIES} ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

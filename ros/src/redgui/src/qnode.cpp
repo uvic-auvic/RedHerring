@@ -23,6 +23,7 @@
 #include <sstream>
 #include <QWidget>
 #include <QLabel>
+
 #include "../include/redgui/qnode.hpp"
 //TODO: Fix thrustor nodes
 //#include "thrusters/Sensitivity.h"
@@ -32,14 +33,14 @@
 #include <fstream>
 
 /*****************************************************************************
-** Namespaces
-*****************************************************************************/
+ * Namespaces
+/*****************************************************************************/
 using namespace cv;
 namespace redgui {
 
 /*****************************************************************************
-** Implementation
-*****************************************************************************/
+ * Implementation
+/*****************************************************************************/
 
 QNode::QNode(int argc, char** argv ) :
 	init_argc(argc),
@@ -54,8 +55,9 @@ QNode::~QNode() {
 	wait();
 }
 
-bool QNode::init() {
-	ros::init(init_argc,init_argv,"redgui");
+bool QNode::init()
+{
+    ros::init(init_argc, init_argv, "redgui");
 	if ( ! ros::master::check() ) {
 		return false;
 	}
@@ -149,13 +151,18 @@ bool QNode::init() {
 
 bool QNode::init(const std::string &master_url, const std::string &host_url) {
     _listViewThreshold = 50;
+
 	std::map<std::string,std::string> remappings;
 	remappings["__master"] = master_url;
 	remappings["__hostname"] = host_url;
-	ros::init(remappings,"redgui");
+
+    //TODO: change back once fixed
+    ros::init(remappings,"redgui_remote");
+
 	if ( ! ros::master::check() ) {
 		return false;
 	}
+
 	ros::start(); // explicitly needed since our nodehandle is going out of scope.
 	ros::NodeHandle n;
     image_transport::ImageTransport it(n);
@@ -402,7 +409,7 @@ void QNode::lightChange(bool lightState)
 {
     std_msgs::Bool boolLightState;
     boolLightState.data = lightState;
-    lightState_publisher.publish(boolLightState);
+    //lightState_publisher.publish(boolLightState);
     return;
 }
 
@@ -411,7 +418,7 @@ void QNode::throttleLockoutChange(bool lockoutState)
 {
     std_msgs::Bool boolLockoutState;
     boolLockoutState.data = lockoutState;
-    throttleLockout_publisher.publish(boolLockoutState);
+    //throttleLockout_publisher.publish(boolLockoutState);
     QNode::sensitivityPublish();
     return;
 }
@@ -467,22 +474,26 @@ void QNode::yawInvertChange(bool invertState)
 
 void QNode::updateControlMode(std::string controlMode)
 {
-    if(controlMode == "ROV")
+    if(controlMode == "ROV") //set data to 1
     {
         ROS_INFO("ROV Mode");
         ROVtoAUVcontrolMode.data = 1;
+        Q_EMIT enableControls(true);
     }
-    else if(controlMode == "AUV")
+    else if(controlMode == "AUV") //set data to 2
     {
         ROS_INFO("AUV Mode");
         ROVtoAUVcontrolMode.data = 2;
+        Q_EMIT enableControls(false);
     }
     else
     {
         ROS_WARN("Invalid mode input!! defaulting to ROV mode.");
         ROVtoAUVcontrolMode.data = 1;
+        Q_EMIT enableControls(true);
     }
-    GUI_ROV_to_AUV_pub_.publish(ROVtoAUVcontrolMode);
+    //TODO: re-enable when the publisher is actually made
+    //GUI_ROV_to_AUV_pub_.publish(ROVtoAUVcontrolMode);
     return;
 }
 
@@ -500,12 +511,12 @@ void QNode::updateVideoRecordMode(int value)
 
 int QNode::whichControlMode()
 {
-    return (int)ROVtoAUVcontrolMode.data;
+    return (int) ROVtoAUVcontrolMode.data;
 }
 
 int QNode::whichVideoRecordMode()
 {
-    return (int)videoRecordMode.data;
+    return (int) videoRecordMode.data;
 }
 
 
