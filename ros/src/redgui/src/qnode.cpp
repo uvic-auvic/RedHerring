@@ -23,6 +23,7 @@
 #include <sstream>
 #include <QWidget>
 #include <QLabel>
+
 #include "../include/redgui/qnode.hpp"
 //TODO: Fix thrustor nodes
 //#include "thrusters/Sensitivity.h"
@@ -473,22 +474,26 @@ void QNode::yawInvertChange(bool invertState)
 
 void QNode::updateControlMode(std::string controlMode)
 {
-    if(controlMode == "ROV")
+    if(controlMode == "ROV") //set data to 1
     {
         ROS_INFO("ROV Mode");
         ROVtoAUVcontrolMode.data = 1;
+        Q_EMIT enableControls(true);
     }
-    else if(controlMode == "AUV")
+    else if(controlMode == "AUV") //set data to 2
     {
         ROS_INFO("AUV Mode");
         ROVtoAUVcontrolMode.data = 2;
+        Q_EMIT enableControls(false);
     }
     else
     {
         ROS_WARN("Invalid mode input!! defaulting to ROV mode.");
         ROVtoAUVcontrolMode.data = 1;
+        Q_EMIT enableControls(true);
     }
-    GUI_ROV_to_AUV_pub_.publish(ROVtoAUVcontrolMode);
+    //TODO: re-enable when the publisher is actually made
+    //GUI_ROV_to_AUV_pub_.publish(ROVtoAUVcontrolMode);
     return;
 }
 
@@ -506,12 +511,12 @@ void QNode::updateVideoRecordMode(int value)
 
 int QNode::whichControlMode()
 {
-    return (int)ROVtoAUVcontrolMode.data;
+    return (int) ROVtoAUVcontrolMode.data;
 }
 
 int QNode::whichVideoRecordMode()
 {
-    return (int)videoRecordMode.data;
+    return (int) videoRecordMode.data;
 }
 
 

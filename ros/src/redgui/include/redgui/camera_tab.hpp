@@ -54,7 +54,6 @@ public Q_SLOTS:
   /*************************************************************/
   void updatePlayerUI(QImage img);
 
-
 private:
   const Ui::MainWindowDesign * ui;
   QNode * qnode;

@@ -29,6 +29,11 @@ using namespace Qt;
 ** Implementation [MainWindow]
 *****************************************************************************/
 
+/*************************************************************
+ * @Name     init
+ * @Args     none
+ * @function setup up all the signal & slot connections
+ *************************************************************/
 MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 	: QMainWindow(parent)
 	, qnode(argc,argv)
@@ -54,16 +59,26 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
      */
     //ui.ControlsGroupBox->setEnabled(true);
     //ui.ControlGroupBox->setEnabled(true);
-    ui.control_tab->setEnabled(true);
-    ui.communications_tab->setEnabled(true);
+
+    //ui.communications_tab->setEnabled(true);
 }
 
+/*************************************************************
+ * @Name     init
+ * @Args     none
+ * @function setup up all the signal & slot connections
+ *************************************************************/
 MainWindow::~MainWindow() {}
 
 /*****************************************************************************
 ** Implementation
 *****************************************************************************/
 
+/*************************************************************
+ * @Name     init
+ * @Args     none
+ * @function setup up all the signal & slot connections
+ *************************************************************/
 void MainWindow::init()
 {
     /* Setup all of the UI elements and connects their internal signal/slots */
@@ -72,6 +87,7 @@ void MainWindow::init()
     /* Connects main window signals and slots to the various triggers */
     QObject::connect(ui.actionAbout_Qt, SIGNAL(triggered(bool)), qApp, SLOT(aboutQt())); // qApp is a global variable for the application
     QObject::connect(&qnode, SIGNAL(rosShutdown()), this, SLOT(close()));
+    QObject::connect(&qnode, SIGNAL(enableControls(bool)), this, SLOT(enableControls(bool)));
 
     /* Setup the UI based off previous settings  */
     ReadSettings();
@@ -85,7 +101,6 @@ void MainWindow::init()
 /*****************************************************************************
 ** Implementation [Menu]
 *****************************************************************************/
-
 void MainWindow::on_actionAbout_triggered() {
     QMessageBox::about(this, tr("About ..."),tr("<h2>REDGUI</h2><p>The GUI used to configure and monitor RedHerring.</p>"));
 }
@@ -94,6 +109,11 @@ void MainWindow::on_actionAbout_triggered() {
 ** Implementation [Configuration]
 *****************************************************************************/
 
+/*************************************************************
+ * @Name     init
+ * @Args     none
+ * @function setup up all the signal & slot connections
+ *************************************************************/
 void MainWindow::ReadSettings() {
     QSettings settings("Qt-Ros Package", "redgui");
     restoreGeometry(settings.value("geometry").toByteArray());
@@ -108,7 +128,8 @@ void MainWindow::ReadSettings() {
     ui.checkbox_remember_settings->setChecked(remember);
     bool checked = settings.value("use_environment_variables", false).toBool();
     ui.checkbox_use_environment->setChecked(checked);
-    if ( checked ) {
+    if (checked)
+    {
     	ui.line_edit_master->setEnabled(false);
     	ui.line_edit_host->setEnabled(false);
     	//ui.line_edit_topic->setEnabled(false);
@@ -116,6 +137,11 @@ void MainWindow::ReadSettings() {
 
 }
 
+/*************************************************************
+ * @Name     init
+ * @Args     none
+ * @function setup up all the signal & slot connections
+ *************************************************************/
 void MainWindow::WriteSettings() {
     QSettings settings("Qt-Ros Package", "redgui");
     settings.setValue("master_url",ui.line_edit_master->text());
@@ -128,11 +154,20 @@ void MainWindow::WriteSettings() {
 
 }
 
+/*************************************************************
+ * @Name     init
+ * @Args     none
+ * @function setup up all the signal & slot connections
+ *************************************************************/
 void MainWindow::closeEvent(QCloseEvent *event)
 {
 	WriteSettings();
 	QMainWindow::closeEvent(event);
 }
+
+/*****************************************************************************
+ * Implementation [Slots]
+/*****************************************************************************/
 
 /*************************************************************
  * @Name     init
@@ -184,7 +219,7 @@ void MainWindow::on_button_connect_clicked(bool check)
 
 
             if(qnode.whichControlMode() == 2)
-                ui.ROVtoAUVPushButton->setText("AUV mode");
+                ui.toggleModeButton->setText("AUV mode");
             /* XXXXX */
             //ui.videoRecordPushButton->setEnabled(false); /* XXXXXX
             //                                              * Disabled for demonstration days so people don't save gigs of video data and overload
@@ -205,6 +240,11 @@ void MainWindow::on_checkbox_use_environment_stateChanged(int state)
     ui.line_edit_master->setEnabled(enabled);
     ui.line_edit_host->setEnabled(enabled);
     //ui.line_edit_topic->setEnabled(enabled);
+}
+
+void MainWindow::enableControls(bool enable)
+{
+    controls_tab.enableControls(enable);
 }
 
 }  // namespace redgui

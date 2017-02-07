@@ -48,6 +48,7 @@ public :
   void init();
   void ReadSettings(std::string filename = CONFIG_FILE_CONTROL);
   void WriteSettings();
+  void enableControls(bool enable);
 
 public Q_SLOTS:
   /*************************************************************
@@ -71,13 +72,9 @@ public Q_SLOTS:
   void on_yawInvertCheckBox_stateChanged(int state);
   void on_rollInvertCheckBox_stateChanged(int state);
 
-  /* Lights checkbox */
+  /* Toggle Buttons and checkboxes */
   void update_ROVtoAUVPushButton();
-
-  /* ROV->AUV button toggle */
   void on_lightsCheckBox_stateChanged(int state);
-
-  /* Throttle Lockout */
   void on_throttleLockoutCheckBox_stateChanged(int state);
 
 private:

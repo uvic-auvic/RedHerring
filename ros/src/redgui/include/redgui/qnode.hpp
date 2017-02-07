@@ -141,6 +141,7 @@ Q_SIGNALS:
     void UCDieTemperatureSignal(float value);
     void OILTemperatureSignal(float value);
     void thrusterAscentSignal(float ascentCommand);
+    void enableControls(bool enable);
 
 private:
 	int init_argc;

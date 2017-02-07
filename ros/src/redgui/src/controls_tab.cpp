@@ -70,7 +70,14 @@ void controls_tab::init() {
     //QObject::connect(ui.lightsPushButton, SIGNAL(toggled(bool)), this, SLOT(on_lightsPushButton_toggled(bool)));
 
     /* Control Mode */
-    QObject::connect(ui->ROVtoAUVPushButton, SIGNAL(released()), this, SLOT(update_ROVtoAUVPushButton()));
+    QObject::connect(ui->toggleModeButton, SIGNAL(released()), this, SLOT(update_ROVtoAUVPushButton()));
+
+    /* Enable Tab and all the GroupBoxes*/
+    ui->control_tab->setEnabled(true);
+    ui->toggleModeButton->setEnabled(true);
+    this->enableControls(true);
+
+
 }
 
 /*************************************************************
@@ -287,12 +294,12 @@ void controls_tab::update_ROVtoAUVPushButton()
     switch (qnode->whichControlMode())
     {
         case 1: /* Currently in ROV mode and switching to AUV mode */
-                ui->ROVtoAUVPushButton->setText("AUV mode");
+                ui->toggleModeButton->setText("AUV mode");
                 qnode->updateControlMode("AUV");
                 break;
 
         default: /* Currently in AUV mode and switching to ROV mode */
-                ui->ROVtoAUVPushButton->setText("ROV mode");
+                ui->toggleModeButton->setText("ROV mode");
                 qnode->updateControlMode("ROV");
     }
 }
@@ -335,6 +342,13 @@ void controls_tab::on_throttleLockoutCheckBox_stateChanged(int state)
         enabled = true;
     }
     qnode->throttleLockoutChange(enabled);
+}
+
+void controls_tab::enableControls(bool enable)
+{
+        ui->JoystickGroupBox->setEnabled(enable);
+        ui->GeneralControlsGroupBox->setEnabled(enable);
+        ui->throttleLockoutCheckBox->setEnabled(enable);
 }
 
 
