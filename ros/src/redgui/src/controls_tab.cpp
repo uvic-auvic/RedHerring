@@ -293,14 +293,17 @@ void controls_tab::update_ROVtoAUVPushButton()
 {
     switch (qnode->whichControlMode())
     {
-        case 1: /* Currently in ROV mode and switching to AUV mode */
+        /* Currently in ROV mode and switching to AUV mode */
+        case redgui::ROV:
                 ui->toggleModeButton->setText("AUV mode");
-                qnode->updateControlMode("AUV");
+                qnode->updateControlMode(redgui::AUV);
                 break;
 
-        default: /* Currently in AUV mode and switching to ROV mode */
+        /* In any other mode, switch back to ROV Mode */
+        default:
                 ui->toggleModeButton->setText("ROV mode");
-                qnode->updateControlMode("ROV");
+                qnode->updateControlMode(redgui::ROV);
+                break; //uneccesary but just to keep if uniform. The compiler will remove it anyway
     }
 }
 
