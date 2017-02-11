@@ -3,7 +3,8 @@
 #TODO: Add a -h or --help argument
 
 #CONSTANTS
-DEFAULT_HOST=`hostname -I`
+DEFAULT_HOST="localhost"
+DEFAULT_IP=`hostname -I`
 ROS_DEFAULT_PORT=11311
 
 # We only want 1 argument, anything more is invalid
@@ -23,10 +24,11 @@ PORT=$ROS_DEFAULT_PORT
 if [[ $# -eq 1 ]]
 then
     HOST=$1
+    export ROS_MASTER_URI="http://$HOST:$PORT"
 fi
 
-export ROS_MASTER_URI="http://$HOST:$PORT"
-export ROS_IP=$DEFAULT_HOST
+
+export ROS_IP="${DEFAULT_IP// /}"
 
 echo "Using ROS_MASTER_URI $ROS_MASTER_URI"
 echo "Using ROS_IP $ROS_IP"
