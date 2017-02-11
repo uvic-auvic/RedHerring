@@ -34,7 +34,7 @@
        <locale language="English" country="Australia"/>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <property name="movable">
        <bool>false</bool>
@@ -247,25 +247,54 @@
        <attribute name="title">
         <string>Camera</string>
        </attribute>
-       <widget class="QGroupBox" name="groupBox_3">
+       <widget class="QGroupBox" name="CameraOneGroupBox">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>501</width>
-          <height>271</height>
+          <width>611</width>
+          <height>311</height>
          </rect>
         </property>
         <property name="title">
-         <string>Front-Facing Camera</string>
+         <string>     Front-Facing Camera</string>
         </property>
-        <widget class="QLabel" name="camera_feed">
+        <widget class="QLabel" name="CameraOneFeed">
          <property name="geometry">
           <rect>
            <x>20</x>
            <y>30</y>
-           <width>480</width>
-           <height>313</height>
+           <width>411</width>
+           <height>251</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">Background-color: #000;</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QGroupBox" name="CameraTwoGroupBox">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>320</y>
+          <width>611</width>
+          <height>291</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>     Downward-Facing Camera</string>
+        </property>
+        <widget class="QLabel" name="CameraTwoFeed">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>30</y>
+           <width>411</width>
+           <height>241</height>
           </rect>
          </property>
          <property name="styleSheet">

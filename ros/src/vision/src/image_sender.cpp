@@ -1,8 +1,20 @@
+/***************************************************************
+ * @file image_sender.cpp
+ * @brief The node which provides a video source of some kind
+ * @date February 2017
+/***************************************************************/
+
+/***************************************************************
+ * Includes
+/***************************************************************/
 #include <opencv2/opencv.hpp>
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <ros/ros.h>
 
+/*************************************************************
+ * Implementation [Image Sender]
+/*************************************************************/
 int main (int argc, char ** argv)
 {
   ros::init(argc, argv, "image_publisher");
@@ -31,6 +43,8 @@ int main (int argc, char ** argv)
         {
           msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
           pub.publish(msg);
+
+          // delay for 1 ms
           cv::waitKey(1);
             
         }
