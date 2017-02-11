@@ -114,20 +114,20 @@ public:
   //void thrusterValueCb(const thrusters::thrusterValues thrustValues);
    //void temperatureCb(const thrusters::thrusterTemperatures temperatures);
     // replaced old with new
+    int  whichControlMode();
+    int  whichVideoRecordMode();
     void thrusterValueCb(thrusterValues thrustValues);
     void temperatureCb(thrusterTemperatures temperatures);
-
+    int  sensitivityData(std::string whichData);
     void lightChange(bool lightState);
     void throttleLockoutChange(bool lockoutState);
-    int sensitivityData(std::string whichData);
     void forwardInvertChange(bool invertState);
     void rollInvertChange(bool invertState);
     void pitchInvertChange(bool invertState);
     void yawInvertChange(bool invertState);
     void updateControlMode(std::string controlMode);
     void updateVideoRecordMode(int value);
-    int whichControlMode();
-    int whichVideoRecordMode();
+
 
 Q_SIGNALS:
 	void loggingUpdated();

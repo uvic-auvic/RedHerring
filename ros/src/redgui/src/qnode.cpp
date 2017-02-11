@@ -71,7 +71,7 @@ bool QNode::init()
     //thrusterValue_subscriber = n.subscribe("/GUI/thrusterValues", 1, &QNode::thrusterValueCb, this);
     //chatter_subscriber = n.subscribe<std_msgs::String>("/GUI/general", 1, &QNode::chatterCb, this);
     //thrusterTemperature_subscriber = n.subscribe("/input/thrusterTemperature", 1, &QNode::temperatureCb, this);
-    //camera_subscriber = it.subscribe("/GUI/camera", 1, &QNode::imageCb, this);
+    camera_subscriber = it.subscribe("/camera/one/image", 1, &QNode::imageCb, this);
     //lightState_publisher = n.advertise<std_msgs::Bool>("/GUI/lights", 1);
     //throttleLockout_publisher = n.advertise<std_msgs::Bool>("/GUI/throttleLockout",1);
     //GUI_ROV_to_AUV_pub_ = n.advertise<std_msgs::Int16>("/GUI/ROVtoAUV", 4);
@@ -171,7 +171,7 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
     // Commenting out all subscribers because there is nothing to subscribe to
     //thrusterTemperature_subscriber = n.subscribe("/input/thrusterTemperature", 1, &QNode::temperatureCb, this);
     //chatter_subscriber = n.subscribe<std_msgs::String>("/GUI/general", 1, &QNode::chatterCb, this);
-    //camera_subscriber = it.subscribe("/GUI/camera", 1, &QNode::imageCb, this);
+    camera_subscriber = it.subscribe("/camera/one/image", 1, &QNode::imageCb, this);
     // thrusterValue_subscriber = n.subscribe("/GUI/thrusterValues", 10, &QNode::thrusterValueCb, this);
     //lightState_publisher = n.advertise<std_msgs::Bool>("/GUI/lights", 1);
     //throttleLockout_publisher = n.advertise<std_msgs::Bool>("/GUI/throttleLockout",1);
@@ -311,7 +311,6 @@ void QNode::imageCb(const sensor_msgs::ImageConstPtr& msg)
     img = QImage((const unsigned char*)(RGBframe.data), RGBframe.cols, RGBframe.rows, QImage::Format_RGB888);
 
     Q_EMIT processedImage(img);
-    return;
 }
 
 void QNode::chatterCb(const std_msgs::String::ConstPtr& msg){
@@ -328,8 +327,8 @@ void QNode::forwardSensitivity(int value)
         sensitivityData_.forwardSensitivity = value;
     else
         sensitivityData_.forwardSensitivity = -1*value;
+
     QNode::sensitivityPublish();
-    return;
 
 }
 
@@ -340,9 +339,8 @@ void QNode::pitchSensitivity(int value)
         sensitivityData_.pitchSensitivity = value;
     else
         sensitivityData_.pitchSensitivity = -1*value;
-    QNode::sensitivityPublish();
-    return;
 
+    QNode::sensitivityPublish();
 }
 
 void QNode::rollSensitivity(int value)

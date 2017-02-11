@@ -24,10 +24,9 @@ PORT=$ROS_DEFAULT_PORT
 if [[ $# -eq 1 ]]
 then
     HOST=$1
-    export ROS_MASTER_URI="http://$HOST:$PORT"
 fi
 
-
+export ROS_MASTER_URI="http://$HOST:$PORT"
 export ROS_IP="${DEFAULT_IP// /}"
 
 echo "Using ROS_MASTER_URI $ROS_MASTER_URI"
