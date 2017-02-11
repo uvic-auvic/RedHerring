@@ -70,8 +70,10 @@ void camera_tab::init()
  *************************************************************/
 void camera_tab::updatePlayerUI(QImage img){
     if(!img.isNull()){
-        ui->camera_feed->setAlignment(Qt::AlignCenter);
-        //ui.camera_feed->setPixmap(QPixmap::fromImage(img).scaled(img.size().width(), img.size().height(), Qt::KeepAspectRatio, Qt::FastTransformation));
-        ui->camera_feed->setPixmap(QPixmap::fromImage(img).scaled(ui->camera_feed->geometry().width(), ui->camera_feed->geometry().height(), Qt::KeepAspectRatio, Qt::FastTransformation));
+        ui->CameraOneFeed->setAlignment(Qt::AlignCenter);
+        ui->CameraTwoFeed->setAlignment(Qt::AlignCenter);
+        ui->CameraOneFeed->setPixmap(QPixmap::fromImage(img).scaled(ui->CameraOneFeed->geometry().width(), ui->CameraOneFeed->geometry().height(), Qt::KeepAspectRatio, Qt::FastTransformation));
+        ui->CameraTwoFeed->setPixmap(QPixmap::fromImage(img).scaled(ui->CameraTwoFeed->geometry().width(), ui->CameraTwoFeed->geometry().height(), Qt::KeepAspectRatio, Qt::FastTransformation));
+
     }
 }
