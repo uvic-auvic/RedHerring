@@ -8,16 +8,13 @@
 /*****************************************************************************
 ** Ifdefs
 *****************************************************************************/
-
-#ifndef redgui_QNODE_HPP_
-#define redgui_QNODE_HPP_
+#ifndef REDGUI_QNODE_HPP
+#define REDGUI_QNODE_HPP
 
 /*****************************************************************************
 ** Includes
 *****************************************************************************/
-
 #include <ros/ros.h>
-#include <string>
 #include <QWidget>
 #include <QThread>
 #include <QStringListModel>
@@ -38,18 +35,31 @@
 #include <image_transport/image_transport.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
-//TODO: Figure out where these files are and get them working again
-//#include "thrusters/Sensitivity.h"
-//#include "thrusters/thrusterValues.h"
-//#include "thrusters/thrusterTemperatures.h"
+#include <string>
 #include "std_msgs/Int32.h"
 
 
 /*****************************************************************************
 ** Namespaces
 *****************************************************************************/
-
 namespace redgui {
+
+/*****************************************************************************
+ * Enums
+*****************************************************************************/
+    enum LogLevel {
+        Debug,
+        Info,
+        Warn,
+        Error,
+        Fatal
+     };
+
+    enum ControlMode
+    {
+        ROV,          // = 0
+        AUV           // = 1
+    };
 
 /*****************************************************************************
  * Structs
@@ -89,17 +99,6 @@ public:
 	bool init(const std::string &master_url, const std::string &host_url);
 	void run();
 
-	/*********************
-	** Logging
-	**********************/
-	enum LogLevel {
-	         Debug,
-	         Info,
-	         Warn,
-	         Error,
-	         Fatal
-	 };
-
 	QStringListModel* loggingModel() { return &logging_model; }
 	void log( const LogLevel &level, const std::string &msg);
     void imageCb(const sensor_msgs::ImageConstPtr& msg);
@@ -116,17 +115,18 @@ public:
     // replaced old with new
     int  whichControlMode();
     int  whichVideoRecordMode();
+    int  sensitivityData(std::string whichData);
     void thrusterValueCb(thrusterValues thrustValues);
     void temperatureCb(thrusterTemperatures temperatures);
-    int  sensitivityData(std::string whichData);
     void lightChange(bool lightState);
     void throttleLockoutChange(bool lockoutState);
     void forwardInvertChange(bool invertState);
     void rollInvertChange(bool invertState);
     void pitchInvertChange(bool invertState);
     void yawInvertChange(bool invertState);
-    void updateControlMode(std::string controlMode);
+    void updateControlMode(const ControlMode control_mode);
     void updateVideoRecordMode(int value);
+
 
 
 Q_SIGNALS:
@@ -161,13 +161,11 @@ private:
     QImage img;
     cv::Mat RGBframe;
 
-    // thrusters::Sensitivity sensitivityData_;
-    // replacing the thrustors sensitivityData with custom struct till other thing fixed
     struct sensitivityData sensitivityData_;
     struct thrusterValues thrustValues;
     struct thrusterTemperatures temperatures;
 
-    std_msgs::Int16 ROVtoAUVcontrolMode, videoRecordMode;
+    std_msgs::Int16 control_mode, videoRecordMode;
     bool forwardInvert_, rollInvert_, pitchInvert_, yawInvert_;
 
 };

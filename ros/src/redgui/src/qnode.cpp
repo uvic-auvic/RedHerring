@@ -9,28 +9,24 @@
 /*****************************************************************************
 ** Includes
 *****************************************************************************/
-
 #include <ros/ros.h>
 #include <ros/network.h>
 #include <cv_bridge/cv_bridge.h>
+#include <std_msgs/String.h>
+#include <std_msgs/Bool.h>
 #include <sensor_msgs/image_encodings.h>
 #include <image_transport/image_transport.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <string>
-#include <math.h>
-#include <std_msgs/String.h>
-#include <sstream>
 #include <QWidget>
 #include <QLabel>
+#include <string>
+#include <math.h>
+#include <sstream>
+#include <fstream>
 
 #include "../include/redgui/qnode.hpp"
-//TODO: Fix thrustor nodes
-//#include "thrusters/Sensitivity.h"
-//#include "thrusters/thrusterValues.h"
-//#include "thrusters/thrusterTemperatures.h"
-#include <std_msgs/Bool.h>
-#include <fstream>
+
 
 /*****************************************************************************
  * Namespaces
@@ -81,7 +77,7 @@ bool QNode::init()
     /*
      * Configuration File Values
      */
-    ROVtoAUVcontrolMode.data = 1; // 1 ROV mode, 2 AUV mode, else error -> default to ROV
+    control_mode.data = 0; // 0: ROV mode, 1: AUV mode, else error -> default to ROV
     videoRecordMode.data = 1;
     forwardInvert_ = false;
     pitchInvert_ = false;
@@ -123,7 +119,7 @@ bool QNode::init()
             }
             else if(line == "ROVtoAUVcontrolMode"){
                 line = strtok(NULL,";");
-                ROVtoAUVcontrolMode.data = strtol(line.c_str(),0,10);
+                control_mode.data = strtol(line.c_str(),0,10);
             }
             else
             {
@@ -180,7 +176,7 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
     /*
      * Configuration File Values
      */
-    ROVtoAUVcontrolMode.data = 1; // 1 ROV mode, 2 AUV mode, else error -> default to ROV
+    control_mode.data = 0; // 0 ROV mode, 1 AUV mode, else error -> default to ROV
     videoRecordMode.data = 1;
     forwardInvert_ = false;
     pitchInvert_ = false;
@@ -223,7 +219,7 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
             }
             else if(line == "ROVtoAUVcontrolMode"){
                 line = strtok(NULL,";");
-                ROVtoAUVcontrolMode.data = strtol(line.c_str(),0,10);
+                control_mode.data = strtol(line.c_str(),0,10);
             }
             else
             {
@@ -244,6 +240,7 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
        sensitivityData_.ascentSensitivity = 10;
 
     }
+
     start();
     QNode::sensitivityPublish();
 	return true;
@@ -260,7 +257,7 @@ void QNode::run() {
 void QNode::log( const LogLevel &level, const std::string &msg) {
 	logging_model.insertRows(logging_model.rowCount(),1);
 	std::stringstream logging_model_msg;
-	switch ( level ) {
+    switch (level) {
 		case(Debug) : {
 				ROS_DEBUG_STREAM(msg);
 				logging_model_msg << "[DEBUG] [" << ros::Time::now() << "]: " << msg;
@@ -362,26 +359,19 @@ void QNode::yawSensitivity(int value)
         sensitivityData_.yawSensitivity = value;
     else
         sensitivityData_.yawSensitivity = -1*value;
-    QNode::sensitivityPublish();
-    return;
 
+    QNode::sensitivityPublish();
 }
 
 void QNode::ascentSensitivity(int value)
 {
-
     sensitivityData_.ascentSensitivity = value;
     QNode::sensitivityPublish();
-    return;
-
 }
 
 void QNode::sensitivityPublish()
 {
-
     //thrusterSensitivity_publisher.publish(sensitivityData_);
-    return;
-
 }
 
 void QNode::thrusterValueCb(thrusterValues thrustValues)
@@ -470,27 +460,31 @@ void QNode::yawInvertChange(bool invertState)
 
 
 
-void QNode::updateControlMode(std::string controlMode)
+void QNode::updateControlMode(const ControlMode control_mode)
 {
-    if(controlMode == "ROV") //set data to 1
+    switch (control_mode)
     {
-        ROS_INFO("ROV Mode");
-        ROVtoAUVcontrolMode.data = 1;
+
+    case ROV:
+        ROS_INFO("Toggling ROV Mode");
+        this->control_mode.data = ROV;
         Q_EMIT enableControls(true);
-    }
-    else if(controlMode == "AUV") //set data to 2
-    {
-        ROS_INFO("AUV Mode");
-        ROVtoAUVcontrolMode.data = 2;
+        break;
+
+    case AUV:
+        ROS_INFO("Toggling AUV Mode");
+        this->control_mode.data = AUV;
         Q_EMIT enableControls(false);
-    }
-    else
-    {
-        ROS_WARN("Invalid mode input!! defaulting to ROV mode.");
-        ROVtoAUVcontrolMode.data = 1;
+        break;
+
+    default:
+        ROS_WARN("Invalid Mode Input. Defaulting to ROV Mode.");
+        this->control_mode.data = ROV;
         Q_EMIT enableControls(true);
+        break;
+
     }
-    //TODO: re-enable when the publisher is actually made
+
     //GUI_ROV_to_AUV_pub_.publish(ROVtoAUVcontrolMode);
     return;
 }
@@ -509,7 +503,7 @@ void QNode::updateVideoRecordMode(int value)
 
 int QNode::whichControlMode()
 {
-    return (int) ROVtoAUVcontrolMode.data;
+    return (int) control_mode.data;
 }
 
 int QNode::whichVideoRecordMode()
