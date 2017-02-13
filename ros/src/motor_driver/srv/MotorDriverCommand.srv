@@ -1,9 +1,0 @@
-string command
-uint8 motor
-uint8 param
----
-string command
-uint8 motor
-uint8 param
-string response
-uint8 success
