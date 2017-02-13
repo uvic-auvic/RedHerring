@@ -17,7 +17,7 @@ int main(int argc, char ** argv)
 
     motor_controller::motor_command srv;
     srv.request.motor_number = 4;
-    srv.request.command_param = 2;
+    srv.request.command_param = 100;
 
     if (setMotorForwardclient.call(srv))
     {
@@ -28,21 +28,6 @@ int main(int argc, char ** argv)
         ROS_WARN("Failed");
     }
 
-    srv.request.motor_number = 8;
-    srv.request.command_param = 1;
-
-    if (setMotorForwardclient.call(srv))
-    {
-        ROS_INFO("%s", srv.response.motor_response.c_str());
-    }
-    else
-    {
-        ROS_WARN("Failed");
-    }
-
-    srv.request.motor_number = 4;
-    srv.request.command_param = 2;
-
     if (setMotorReverseclient.call(srv))
     {
         ROS_INFO("%s", srv.response.motor_response.c_str());
@@ -52,10 +37,7 @@ int main(int argc, char ** argv)
         ROS_WARN("Failed");
     }
 
-    srv.request.motor_number = 8;
-    srv.request.command_param = 1;
-
-    if (setMotorReverseclient.call(srv))
+    if (getRPMclient.call(srv))
     {
         ROS_INFO("%s", srv.response.motor_response.c_str());
     }
@@ -64,8 +46,14 @@ int main(int argc, char ** argv)
         ROS_WARN("Failed");
     }
 
-    srv.request.motor_number = 4;
-    srv.request.command_param = 2;
+    if (stopMotorclient.call(srv))
+    {
+        ROS_INFO("%s", srv.response.motor_response.c_str());
+    }
+    else
+    {
+        ROS_WARN("Failed");
+    }
 
     if (stopAllMotorsclient.call(srv))
     {
@@ -76,9 +64,23 @@ int main(int argc, char ** argv)
         ROS_WARN("Failed");
     }
 
+    if (setPWMclient.call(srv))
+    {
+        ROS_INFO("%s", srv.response.motor_response.c_str());
+    }
+    else
+    {
+        ROS_WARN("Failed");
+    }
 
-
-
+    if (calibrateMotorclient.call(srv))
+    {
+        ROS_INFO("%s", srv.response.motor_response.c_str());
+    }
+    else
+    {
+        ROS_WARN("Failed");
+    }
   
   return 0;
 }
