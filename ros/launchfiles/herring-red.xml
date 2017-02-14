@@ -1,6 +1,19 @@
 <launch>        
         <!--Global Argument Definitions-->
-        <!--Vision Node-->
+
+        <!--Environment Variables-->
+        <arg name="IS_LOCAL" value="$(optenv ROS_MASTER_LOC true)"/>
+
+        <!--Motors-->
+        <arg name="MotorForwardService" value="setMotorFOrward"/>
+        <arg name="MotorReverseService" value="setMotorReverse"/>
+        <arg name="StopMotorsService" value="stopAllMotors"/>
+        <arg name="StopMotorService" value="getRPM"/>
+        <arg name="getRPMService" value="setRPM"/>
+        <arg name="setPWMService" value="setPWM"/>
+        <arg name="CalibrateMotor" value="calibrateMotor"/>
+        <arg name="motor_controller_fd" value="/dev/sttyUSB0"/>
+
         <!--Top Facing Camera-->
         <arg name="camera_one_name" value="Top-Facing Camera"/>
         <arg name="camera_one_fd" value="/dev/video0"/>
@@ -12,11 +25,10 @@
         <arg name="camera_two_pub" value="/camera/two/image"/>
 
         <!--Node Definitions-->
-
         <!--GUI-->
         <node name="redgui" pkg="redgui" type="redgui">
               <param name="camera_one_pub" value="$(arg camera_one_pub)"/>
-              <param name="camera_two_pub" value="($arg camera_two_pub)"/>
+              <param name="camera_two_pub" value="$(arg camera_two_pub)"/>
         </node> 
 
         <!--Vision-->        
@@ -28,6 +40,17 @@
         <node name="camera_two" pkg="vision" type="image_sender">
           <param name="name" value="$(arg camera_two_name)"/>
           <param name="fd" value="$(arg camera_two_fd)"/>
-          <param name="pub" value="($arg camera_two_pub)"/>
+          <param name="pub" value="$(arg camera_two_pub)"/>
+        </node>
+
+        <node name="motor_controllers" pkg="motor_controller" type="motor_controller" required="true">
+          <param name="MotorForwardService" value="$(arg MotorForwardService)"/>
+          <param name="MotorReverseService" value="$(arg MotorReverseService)"/>
+          <param name="StopMotorsService" value="$(arg StopMotorService)"/>
+          <param name="StopMotorService" value="$(arg StopMotorService)"/>
+          <param name="getRPMService" value="$(arg getRPMService)"/>
+          <param name="setPWMService" value="$(arg setPWMService)"/>
+          <param name="CalibrateMotor" value="$(arg CalibrateMotor)"/>
+          <param name="fd" value="$(arg motor_controller_fd)"/>
         </node>
 </launch>

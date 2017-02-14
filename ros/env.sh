@@ -52,9 +52,10 @@ done
 popd > /dev/null
 
 # In case you're wondering about the name 'herring-red...'
-# So because ros is packed with hundreds of packages
+# ROS is packed with hundreds of packages
 # typing `roslaunch <TAB>` will not get you anywhere (even if there is only 1 launch file in the directory)
 # the next best thing is to only have to type 1 character then <TAB> for autocomplete
 # But again because there are so many packages there are only 4 characters that no package name starts with
-# 'h' 'w' 'x' 'y' 
-# So if anyone can come up with a better name that describes the entire project do tell
+# 'h', 'w', 'x', 'y' 
+# So if anyone can come up with a better name that describes the entire project 
+# and starts with one of those characters do tell
