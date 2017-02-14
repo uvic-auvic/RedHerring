@@ -1,0 +1,33 @@
+<launch>        
+        <!--Global Argument Definitions-->
+        <!--Vision Node-->
+        <!--Top Facing Camera-->
+        <arg name="camera_one_name" value="Top-Facing Camera"/>
+        <arg name="camera_one_fd" value="/dev/video0"/>
+        <arg name="camera_one_pub" value="/camera/one/image"/>
+
+        <!--Bottom Facing Camera-->
+        <arg name="camera_two_name" value="Bottom-Facing Camera"/>
+        <arg name="camera_two_fd" value="/dev/video1"/>
+        <arg name="camera_two_pub" value="/camera/two/image"/>
+
+        <!--Node Definitions-->
+
+        <!--GUI-->
+        <node name="redgui" pkg="redgui" type="redgui">
+              <param name="camera_one_pub" value="$(arg camera_one_pub)"/>
+              <param name="camera_two_pub" value="($arg camera_two_pub)"/>
+        </node> 
+
+        <!--Vision-->        
+        <node name="camera_one" pkg="vision" type="image_sender" required="true">
+          <param name="name" value="$(arg camera_one_name)"/>
+          <param name="fd" value="$(arg camera_one_fd)"/>
+          <param name="pub" value="$(arg camera_one_pub)"/>
+        </node>
+        <!--node name="camera_two" pkg="vision" type="image_sender">
+          <param name="name" value="$(arg camera_two_name)"/>
+          <param name="fd" value="$(arg camera_two_fd)"/>
+          <param name="pub" value="($arg camera_two_pub)"/>
+        </node-->
+</launch>

@@ -12,7 +12,7 @@
 #include <QString>
 #include <QtGui/QMainWindow>
 
-#include "../include/redgui/motors_tab.hpp"
+#include "../include/motors_tab.hpp"
 
 /***************************************************************
  * Namespaces

@@ -12,7 +12,7 @@
 #include <QString>
 #include <QtGui/QMainWindow>
 
-#include "../include/redgui/camera_tab.hpp"
+#include "../include/camera_tab.hpp"
 
 /***************************************************************
  * Namespaces
@@ -71,8 +71,18 @@ void camera_tab::init()
 void camera_tab::updatePlayerUI(QImage img){
     if(!img.isNull()){
         ui->CameraOneFeed->setAlignment(Qt::AlignCenter);
-        ui->CameraTwoFeed->setAlignment(Qt::AlignCenter);
         ui->CameraOneFeed->setPixmap(QPixmap::fromImage(img).scaled(ui->CameraOneFeed->geometry().width(), ui->CameraOneFeed->geometry().height(), Qt::KeepAspectRatio, Qt::FastTransformation));
+    }
+}
+
+/*************************************************************
+ * @Name     init
+ * @Args     none
+ * @function setup up all the signal & slot connections
+ *************************************************************/
+void camera_tab::updatePlayerUI2(QImage img){
+    if(!img.isNull()){
+        ui->CameraTwoFeed->setAlignment(Qt::AlignCenter);
         ui->CameraTwoFeed->setPixmap(QPixmap::fromImage(img).scaled(ui->CameraTwoFeed->geometry().width(), ui->CameraTwoFeed->geometry().height(), Qt::KeepAspectRatio, Qt::FastTransformation));
 
     }

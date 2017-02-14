@@ -53,14 +53,6 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
     system_tab.init();
     motors_tab.init();
     camera_tab.init();
-
-    /*
-     * Enable all the views
-     */
-    //ui.ControlsGroupBox->setEnabled(true);
-    //ui.ControlGroupBox->setEnabled(true);
-
-    //ui.communications_tab->setEnabled(true);
 }
 
 /*************************************************************
@@ -132,7 +124,6 @@ void MainWindow::ReadSettings() {
     {
     	ui.line_edit_master->setEnabled(false);
     	ui.line_edit_host->setEnabled(false);
-    	//ui.line_edit_topic->setEnabled(false);
     }
 
 }

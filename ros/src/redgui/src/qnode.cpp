@@ -25,7 +25,7 @@
 #include <sstream>
 #include <fstream>
 
-#include "../include/redgui/qnode.hpp"
+#include "../include/qnode.hpp"
 
 
 /*****************************************************************************
@@ -68,6 +68,7 @@ bool QNode::init()
     //chatter_subscriber = n.subscribe<std_msgs::String>("/GUI/general", 1, &QNode::chatterCb, this);
     //thrusterTemperature_subscriber = n.subscribe("/input/thrusterTemperature", 1, &QNode::temperatureCb, this);
     camera_subscriber = it.subscribe("/camera/one/image", 1, &QNode::imageCb, this);
+    camera_subscriber2 = it.subscribe("/camera/two/image", 1, &QNode::imageCb2, this);
     //lightState_publisher = n.advertise<std_msgs::Bool>("/GUI/lights", 1);
     //throttleLockout_publisher = n.advertise<std_msgs::Bool>("/GUI/throttleLockout",1);
     //GUI_ROV_to_AUV_pub_ = n.advertise<std_msgs::Int16>("/GUI/ROVtoAUV", 4);
@@ -168,6 +169,7 @@ bool QNode::init(const std::string &master_url, const std::string &host_url) {
     //thrusterTemperature_subscriber = n.subscribe("/input/thrusterTemperature", 1, &QNode::temperatureCb, this);
     //chatter_subscriber = n.subscribe<std_msgs::String>("/GUI/general", 1, &QNode::chatterCb, this);
     camera_subscriber = it.subscribe("/camera/one/image", 1, &QNode::imageCb, this);
+    camera_subscriber2 = it.subscribe("/camera/two/image", 1, &QNode::imageCb2, this);
     // thrusterValue_subscriber = n.subscribe("/GUI/thrusterValues", 10, &QNode::thrusterValueCb, this);
     //lightState_publisher = n.advertise<std_msgs::Bool>("/GUI/lights", 1);
     //throttleLockout_publisher = n.advertise<std_msgs::Bool>("/GUI/throttleLockout",1);
@@ -308,6 +310,24 @@ void QNode::imageCb(const sensor_msgs::ImageConstPtr& msg)
     img = QImage((const unsigned char*)(RGBframe.data), RGBframe.cols, RGBframe.rows, QImage::Format_RGB888);
 
     Q_EMIT processedImage(img);
+}
+
+void QNode::imageCb2(const sensor_msgs::ImageConstPtr& msg)
+{
+    cv_bridge::CvImagePtr cv_ptr;
+    try
+    {
+        cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
+    }
+    catch(cv_bridge::Exception& e)
+    {
+        ROS_ERROR("cv_bridge exception: %s", e.what());
+        return;
+    }
+    cv::cvtColor(cv_ptr->image,RGBframe2, CV_BGR2RGB);
+    img2 = QImage((const unsigned char*)(RGBframe.data), RGBframe.cols, RGBframe.rows, QImage::Format_RGB888);
+
+    Q_EMIT processedImage(img2);
 }
 
 void QNode::chatterCb(const std_msgs::String::ConstPtr& msg){
