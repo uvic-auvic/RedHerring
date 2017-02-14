@@ -19,7 +19,7 @@
 int main (int argc, char ** argv)
 {
     ros::init(argc, argv, "image_publisher");
-    ros::NodeHandle nh;
+    ros::NodeHandle nh("~");
     image_transport::ImageTransport it(nh);
 
     std::string name, fd, pub;

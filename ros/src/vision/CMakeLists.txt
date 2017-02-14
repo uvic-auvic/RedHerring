@@ -44,5 +44,8 @@ find_package(OpenCV REQUIRED)
 add_executable(image_sender src/image_sender.cpp)
 target_link_libraries(image_sender ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
+add_executable(image_sender src/image_sender2.cpp)
+target_link_libraries(image_sender2 ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
 add_executable(image_reciever src/image_reciever.cpp)
 target_link_libraries(image_reciever ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

@@ -15,7 +15,7 @@
 #include <iostream>
 #include <stdio.h>
 
-#include "../include/redgui/main_window.hpp"
+#include "../include/main_window.hpp"
 
 /*****************************************************************************
 ** Namespaces

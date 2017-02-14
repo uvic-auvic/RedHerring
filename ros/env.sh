@@ -45,7 +45,11 @@ source devel/setup.bash
 # This part might seem pointless, but trust me it makes sense
 # Launch files won't get parsed as XML by an editor (such as emacs)
 # so I decided to keep the xml extension and have this script make a copy with the .launch extension
-cp -f launchfiles/herring-red.xml herring-red.launch
+pushd launchfiles > /dev/null
+for f in *.xml; do
+    cp "$f" "../${f%.xml}.launch"
+done
+popd > /dev/null
 
 # In case you're wondering about the name 'herring-red...'
 # So because ros is packed with hundreds of packages

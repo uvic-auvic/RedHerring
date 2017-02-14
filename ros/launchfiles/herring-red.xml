@@ -25,9 +25,9 @@
           <param name="fd" value="$(arg camera_one_fd)"/>
           <param name="pub" value="$(arg camera_one_pub)"/>
         </node>
-        <!--node name="camera_two" pkg="vision" type="image_sender">
+        <node name="camera_two" pkg="vision" type="image_sender">
           <param name="name" value="$(arg camera_two_name)"/>
           <param name="fd" value="$(arg camera_two_fd)"/>
           <param name="pub" value="($arg camera_two_pub)"/>
-        </node-->
+        </node>
 </launch>
