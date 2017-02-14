@@ -11,7 +11,7 @@
 
 #include <QtGui>
 #include <QApplication>
-#include "../include/redgui/main_window.hpp"
+#include "../include/main_window.hpp"
 
 /*****************************************************************************
  * Defines

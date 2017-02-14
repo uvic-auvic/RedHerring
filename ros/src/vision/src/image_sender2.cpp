@@ -18,8 +18,8 @@
 /*************************************************************/
 int main (int argc, char ** argv)
 {
-    ros::init(argc, argv, "image_publisher");
-    ros::NodeHandle nh("~");
+    ros::init(argc, argv, "image_publisher2");
+    ros::NodeHandle nh;
     image_transport::ImageTransport it(nh);
 
     std::string name, fd, pub;

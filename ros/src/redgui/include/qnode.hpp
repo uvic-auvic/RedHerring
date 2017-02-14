@@ -100,8 +100,12 @@ public:
 	void run();
 
 	QStringListModel* loggingModel() { return &logging_model; }
+    int  whichControlMode();
+    int  whichVideoRecordMode();
+    int  sensitivityData(std::string whichData);
 	void log( const LogLevel &level, const std::string &msg);
     void imageCb(const sensor_msgs::ImageConstPtr& msg);
+    void imageCb2(const sensor_msgs::ImageConstPtr& msg);
     void chatterCb(const std_msgs::String::ConstPtr& msg);
     void forwardSensitivity(int value);
     void pitchSensitivity(int value);
@@ -109,13 +113,6 @@ public:
     void yawSensitivity(int value);
     void ascentSensitivity(int value);
     void sensitivityPublish();
-
-  //void thrusterValueCb(const thrusters::thrusterValues thrustValues);
-   //void temperatureCb(const thrusters::thrusterTemperatures temperatures);
-    // replaced old with new
-    int  whichControlMode();
-    int  whichVideoRecordMode();
-    int  sensitivityData(std::string whichData);
     void thrusterValueCb(thrusterValues thrustValues);
     void temperatureCb(thrusterTemperatures temperatures);
     void lightChange(bool lightState);
@@ -127,12 +124,11 @@ public:
     void updateControlMode(const ControlMode control_mode);
     void updateVideoRecordMode(int value);
 
-
-
 Q_SIGNALS:
 	void loggingUpdated();
     void rosShutdown();
     void processedImage(const QImage &image);
+    void processedImage2(const QImage &image);
     void valueChanged(float value);
     void thrusterForwardSignal(float thrustValue);
     void thrusterPitchSignal(float thrustValue);
@@ -156,10 +152,10 @@ private:
     ros::Subscriber thrusterValue_subscriber;
     ros::Subscriber thrusterTemperature_subscriber;
     ros::Subscriber chatter_subscriber;
-    image_transport::Subscriber camera_subscriber;
+    image_transport::Subscriber camera_subscriber, camera_subscriber2;
     QStringListModel logging_model;
-    QImage img;
-    cv::Mat RGBframe;
+    QImage img, img2;
+    cv::Mat RGBframe, RGBframe2;
 
     struct sensitivityData sensitivityData_;
     struct thrusterValues thrustValues;

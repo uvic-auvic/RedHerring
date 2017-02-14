@@ -53,6 +53,7 @@ public Q_SLOTS:
    * MainWindow Interface
   /*************************************************************/
   void updatePlayerUI(QImage img);
+  void updatePlayerUI2(QImage img);
 
 private:
   const Ui::MainWindowDesign * ui;

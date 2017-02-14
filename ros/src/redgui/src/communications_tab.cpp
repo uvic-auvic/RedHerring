@@ -12,7 +12,7 @@
 #include <QString>
 #include <QtGui/QMainWindow>
 
-#include "../include/redgui/communications_tab.hpp"
+#include "../include/communications_tab.hpp"
 
 /***************************************************************
  * Namespaces
