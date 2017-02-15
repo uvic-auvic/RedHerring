@@ -28,7 +28,10 @@ int main (int argc, char ** argv)
     nh.getParam("pub", pub);
     image_transport::Publisher publisher = it.advertise(pub, 5);
 
-    cv::VideoCapture cap(fd);
+    /* The file descripter will be something like /dev/video0, but we want the last char 0 as an int */
+    char last_char = fd.back();
+    int device_index = last_char - '0';
+    cv::VideoCapture cap(device_index);
 
     if (!cap.isOpened())
     {
