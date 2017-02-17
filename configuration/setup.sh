@@ -12,9 +12,10 @@ wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 # Update package list
 sudo apt-get update
 
-# Install whole ROS desktop application
-sudo apt-get install ros-indigo-desktop-full
-sudo apt-get install ros-indigo-gazebo7-ros-pkgs
+# Install whole ROS desktop application suite + gazebo 7
+sudo apt-get install -y ros-indigo-desktop-full 
+sudo apt-get remove -y gazebo2
+sudo apt-get install -y ros-indigo-gazebo7-ros-pkgs ros-indigo-gazebo7-ros-control ros-indigo-gazebo7-ros-plugins ros-indigo-gazebo7-ros-msgs libgazebo7 libgazebo7-dev
 
 # Install all the required packages
 source package-setup.sh
