@@ -284,7 +284,7 @@ int main(int argc, char ** argv)
     nh.getParam("MotorForwardService", MotorForwardServiceName);
     nh.getParam("MotorReverseService", MotorReverseServiceName);
     nh.getParam("StopMotorsService"  ,   StopMotorsServiceName);
-    nh.getParam("StopMotorService"   ,    StopMotorServiceName);
+    nh.getParam("StopMotorService"   ,   StopMotorServiceName);
     nh.getParam("getRPMService"      ,       getRPMServiceName);
     nh.getParam("setPWMService"      ,       setPWMServiceName);
     nh.getParam("CalibrateMotors"    ,     CalibrateMotorsName);
