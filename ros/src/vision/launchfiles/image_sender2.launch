@@ -1,0 +1,15 @@
+<launch>        
+        <!-- Vision Node -->
+
+        <!-- Arguments (Overrideable)-->
+        <arg name="name" value="top_face_cam" />
+        <arg name="fd" value="/dev/video0" />
+        <arg name="pub" value="/camera/one/image" />
+
+        <node name="image_sender_2" pkg="vision" type="image_sender2" required="true">
+          <param name="name" value="$(arg name)"/>
+          <param name="fd" value="$(arg fd)"/>
+          <param name="pub" value="$(arg pub)"/>
+        </node>
+
+</launch>
