@@ -2,14 +2,14 @@
         <!-- Motor Controller Node -->
 
         <!-- Arguments (Overrideable)-->
-        <arg name="MotorForwardService" value="setMotorForward"/>
-        <arg name="MotorReverseService" value="setMotorReverse"/>
-        <arg name="StopMotorsService" value="stopAllMotors"/>
-        <arg name="StopMotorService" value="stopMotor"/>
-        <arg name="getRPMService" value="getRPM"/>
-        <arg name="setPWMService" value="setPWM"/>
-        <arg name="CalibrateMotor" value="calibrateMotor"/>
-        <arg name="motor_controller_fd" value="/dev/sttyUSB0"/>
+        <arg name="MotorForwardService" default="setMotorForward"/>
+        <arg name="MotorReverseService" default="setMotorReverse"/>
+        <arg name="StopMotorsService" default="stopAllMotors"/>
+        <arg name="StopMotorService" default="stopMotor"/>
+        <arg name="getRPMService" default="getRPM"/>
+        <arg name="setPWMService" default="setPWM"/>
+        <arg name="CalibrateMotor" default="calibrateMotor"/>
+        <arg name="motor_controller_fd" default="/dev/sttyUSB0"/>
 
         <node name="motor_controller" pkg="motor_controller" type="motor_controller" required="true">
           <param name="MotorForwardService" value="$(arg MotorForwardService)"/>

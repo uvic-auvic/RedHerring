@@ -2,9 +2,9 @@
         <!-- Vision Node -->
 
         <!-- Arguments (Overrideable)-->
-        <arg name="name" value="top_face_cam" />
-        <arg name="fd" value="/dev/video0" />
-        <arg name="pub" value="/camera/one/image" />
+        <arg name="name" default="bot_face_cam"/>
+        <arg name="fd" default="/dev/video1"/>
+        <arg name="pub" default="/camera/two/image"/>
 
         <node name="image_sender_2" pkg="vision" type="image_sender2" required="true">
           <param name="name" value="$(arg name)"/>
