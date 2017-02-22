@@ -57,6 +57,7 @@ void camera_tab::init()
     //TODO: reconnect once camera is operational
     //QObject::connect(ui.videoRecordPushButton, SIGNAL(released()), this, SLOT(updateVideoRecordPushButton()));
     QObject::connect(qnode, SIGNAL(processedImage(QImage)), this, SLOT(updatePlayerUI(QImage)));
+    QObject::connect(qnode, SIGNAL(processedImage2(QImage)), this, SLOT(updatePlayerUI2(QImage)));
 }
 
 /*************************************************************

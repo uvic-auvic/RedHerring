@@ -11,7 +11,7 @@
 #include <image_transport/image_transport.h>
 #include <cv_bridge/cv_bridge.h>
 #include <ros/ros.h>
-#include<string>
+#include <string>
 
 /*************************************************************
  * Implementation [Image Sender]
@@ -19,7 +19,7 @@
 int main (int argc, char ** argv)
 {
     ros::init(argc, argv, "image_publisher2");
-    ros::NodeHandle nh;
+    ros::NodeHandle nh("~");
     image_transport::ImageTransport it(nh);
 
     std::string name, fd, pub;

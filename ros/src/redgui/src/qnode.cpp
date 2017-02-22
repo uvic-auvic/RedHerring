@@ -306,7 +306,7 @@ void QNode::imageCb(const sensor_msgs::ImageConstPtr& msg)
         ROS_ERROR("cv_bridge exception: %s", e.what());
         return;
     }
-    cv::cvtColor(cv_ptr->image,RGBframe, CV_BGR2RGB);
+    cv::cvtColor(cv_ptr->image, RGBframe, CV_BGR2RGB);
     img = QImage((const unsigned char*)(RGBframe.data), RGBframe.cols, RGBframe.rows, QImage::Format_RGB888);
 
     Q_EMIT processedImage(img);
@@ -324,10 +324,9 @@ void QNode::imageCb2(const sensor_msgs::ImageConstPtr& msg)
         ROS_ERROR("cv_bridge exception: %s", e.what());
         return;
     }
-    cv::cvtColor(cv_ptr->image,RGBframe2, CV_BGR2RGB);
-    img2 = QImage((const unsigned char*)(RGBframe.data), RGBframe.cols, RGBframe.rows, QImage::Format_RGB888);
-
-    Q_EMIT processedImage(img2);
+    cv::cvtColor(cv_ptr->image, RGBframe2, CV_BGR2RGB);
+    img2 = QImage((const unsigned char*)(RGBframe2.data), RGBframe2.cols, RGBframe2.rows, QImage::Format_RGB888);
+    Q_EMIT processedImage2(img2);
 }
 
 void QNode::chatterCb(const std_msgs::String::ConstPtr& msg){

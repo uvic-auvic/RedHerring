@@ -10,31 +10,41 @@
         <arg name="override_motor_controllers" value="false"/>
 
         <!-- Enables -->
+        <arg name="enable_camera_node_1" value="true"/>
         <arg name="enable_camera_node_2" value="false"/>
 
         <!-- Included Roslaunch Files -->
-        <!-- Vision -->
-        <include file="$(find vision)/launchfiles/image_sender.launch">
-          <group if="$(arg override_vision_sender_1)">
-            <param name="name" value="top_face_cam"/>
-            <param name="fd" value="/dev/video9"/>
-            <param name="pub" value="/camera/one/image"/>
-          </group>
-        </include>
 
+        <!-- Vision-Image-Sender-1 -->
+        <group if="$(arg enable_camera_node_1)">
+          <group if="$(arg override_vision_sender_1)">
+            <include file="$(find vision)/launchfiles/image_sender.launch">
+              <arg name="name" value="top_face_cam"/>
+              <arg name="fd" value="/dev/video5"/>
+              <arg name="pub" value="/camera/one/image"/>
+            </include>
+          </group>
+          <group unless="$(arg override_vision_sender_1)">
+            <include file="$(find vision)/launchfiles/image_sender.launch"/>
+          </group>
+        </group>
+        <!-- Vision-Image-Sender-2 -->
         <group if="$(arg enable_camera_node_2)">
-          <include file="$(find vision)/launchfiles/image_sender2.launch">
-            <group if="$(arg override_vision_sender_1)">
-              <param name="name" value="top_face_cam"/>
-              <param name="fd" value="/dev/video9"/>
-              <param name="pub" value="/camera/one/image"/>
+            <group if="$(arg override_vision_sender_2)">
+              <include file="$(find vision)/launchfiles/image_sender2.launch">
+                <arg name="name" value="bot_face_cam"/>
+                <arg name="fd" value="/dev/video0"/>
+                <arg name="pub" value="/camera/two/image"/>
+              </include>
             </group>
-          </include>
+            <group unless="$(arg override_vision_sender_2)">
+              <include file="$(find vision)/launchfiles/image_sender2.launch"/>
+            </group>
         </group>
 
         <!--Motors-->
-        <include file="$(find motor_controller)/launchfiles/motor_controller.launch">
-          <group if="$(arg override_motor_controllers)">
+        <group if="$(arg override_motor_controllers)">
+          <include file="$(find motor_controller)/launchfiles/motor_controller.launch">
             <arg name="MotorForwardService" value="setMotorForward"/>
             <arg name="MotorReverseService" value="setMotorReverse"/>
             <arg name="StopMotorsService" value="stopAllMotors"/>
@@ -43,7 +53,10 @@
             <arg name="setPWMService" value="setPWM"/>
             <arg name="CalibrateMotor" value="calibrateMotor"/>
             <arg name="motor_controller_fd" value="/dev/sttyUSB0"/>
-          </group>
-        </include>
+          </include>
+        </group>
+        <group unless="$(arg override_motor_controllers)">
+          <include file="$(find motor_controller)/launchfiles/motor_controller.launch"/>
+        </group>
 
 </launch>
