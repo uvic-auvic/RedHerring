@@ -2,7 +2,7 @@
 
 # Install the VNC server
 sudo apt-get update
-sudo apt-get install xfce4 xfce4-goodies tightvncserver
+sudo apt-get install -y xfce4 xfce4-goodies tightvncserver
 
 # Start the VNC server to create the config directories then kill it
 vncserver
