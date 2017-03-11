@@ -1,6 +1,6 @@
 #!/bin/bash
 PATH="$PATH:/usr/bin/"
-#export USER="user"
+export USER="$USER"
 DISPLAY="1"
 DEPTH="16"
 GEOMETRY="1024x768"
