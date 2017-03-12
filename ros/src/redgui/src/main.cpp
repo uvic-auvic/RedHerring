@@ -16,7 +16,7 @@
 /*****************************************************************************
  * Defines
  *****************************************************************************/
-#define GUI_WIDTH_MULTIPLIER  0.75
+#define GUI_WIDTH_MULTIPLIER  0.45
 #define GUI_HEIGHT_MULTIPLIER 0.85
 
 /*****************************************************************************
@@ -30,9 +30,9 @@ int main(int argc, char **argv) {
     QApplication app(argc, argv);
     redgui::MainWindow w(argc,argv);
 
-    /* Sets the GUI size to 85% of your screens height and 75% the width */
+    /* Sets the GUI size to ~85% of your screens height and ~45% the width */
     auto qrect = QApplication::desktop()->screenGeometry();
-    int gui_width = qrect.height() * GUI_WIDTH_MULTIPLIER;
+    int gui_width = qrect.width() * GUI_WIDTH_MULTIPLIER;
     int gui_height = qrect.height() * GUI_HEIGHT_MULTIPLIER;
     w.setFixedSize(gui_width,gui_height);
 
