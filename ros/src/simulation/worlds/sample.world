@@ -9,7 +9,7 @@
     </include>
 
     <model name="red_herring">
-      <pose>0 0 0  0 0 0</pose>
+      <pose>0 0 2  0 0 0</pose>
       <static>true</static>
       <link name="main_body">
         <visual name="visual">
@@ -20,25 +20,26 @@
       </link>
     </model>
 
-    <!--population name="buoy_population">
+    <population name="buoy_population">
       <model name="buoy">
         <include>
           <static>true</static>
-          <uri>model://buoy.dae</uri>
+          <uri>file://../models/buoy</uri>
         </include>
       </model>
       <pose>0 0 0 0 0 0</pose>
       <box>
-        <size>50 50 50</size>
+        <size>20 20 20</size>
       </box>
       <model_count>6</model_count>
       <distribution>
         <type>random</type>
       </distribution>
-    </population-->
+    </population>
 
     <plugin name="buoyancy" filename="libBuoyancyPlugin.so">
-      <fluid_density>999.1026</fluid_density>
+      <fluid_density>100</fluid_density>
+      <link name="buoy"/>
     </plugin>
 
   </world>
