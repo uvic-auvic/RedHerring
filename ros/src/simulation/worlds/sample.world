@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<sdf version="1.4">
+<sdf version="1.5">
   <world name="default_auvic">
     <include>
       <uri>model://ground_plane</uri>
@@ -19,6 +19,27 @@
         </visual>
       </link>
     </model>
+
+    <!--population name="buoy_population">
+      <model name="buoy">
+        <include>
+          <static>true</static>
+          <uri>model://buoy.dae</uri>
+        </include>
+      </model>
+      <pose>0 0 0 0 0 0</pose>
+      <box>
+        <size>50 50 50</size>
+      </box>
+      <model_count>6</model_count>
+      <distribution>
+        <type>random</type>
+      </distribution>
+    </population-->
+
+    <plugin name="buoyancy" filename="libBuoyancyPlugin.so">
+      <fluid_density>999.1026</fluid_density>
+    </plugin>
 
   </world>
 </sdf>
