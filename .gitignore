@@ -5,4 +5,3 @@ ros/build/
 ros/src/CMakeLists.txt
 ros/src/CMakeLists.txt.*
 ros/*.launch
-
