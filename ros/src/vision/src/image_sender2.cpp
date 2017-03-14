@@ -40,7 +40,12 @@ int main (int argc, char ** argv)
 
     while(nh.ok())
     {
-        sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", source.capture()).toImageMsg();
+        cv::Mat frame = source.capture();
+        if (frame.empty()) {
+            continue;
+        }
+
+        sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
         publisher.publish(msg);
         cv::waitKey(1);
         ros::spinOnce();
