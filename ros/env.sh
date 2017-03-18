@@ -41,21 +41,3 @@ echo "Using ROS_MASTER_URI $ROS_MASTER_URI"
 echo "Using ROS_IP $ROS_IP"
 
 source devel/setup.bash
-
-# This part might seem pointless, but trust me it makes sense
-# Launch files won't get parsed as XML by an editor (such as emacs)
-# so I decided to keep the xml extension and have this script make a copy with the .launch extension
-pushd launchfiles > /dev/null
-for f in *.xml; do
-    cp "$f" "../${f%.xml}.launch"
-done
-popd > /dev/null
-
-# In case you're wondering about the name 'herring-red...'
-# ROS is packed with hundreds of packages
-# typing `roslaunch <TAB>` will not get you anywhere (even if there is only 1 launch file in the directory)
-# the next best thing is to only have to type 1 character then <TAB> for autocomplete
-# But again because there are so many packages there are only 4 characters that no package name starts with
-# 'h', 'w', 'x', 'y' 
-# So if anyone can come up with a better name that describes the entire project 
-# and starts with one of those characters do tell
