@@ -1,0 +1,18 @@
+<launch>
+
+	<!-- Joystick Controller Node -->
+
+	<!-- Arguments (Overrideable) -->
+	<arg name="joystick_fd" default="/dev/input/js0"/>
+	<arg name="chatter_pub" default="/input/joystick"/>
+	<arg name="GUI_Pub" default="/GUI/general"/>
+	<arg name="loop_rate" default= "1000"/>
+
+	<node name ="joystick" pkg="joystick" type="joystick" required="true">
+		<param name="joystick_fd" value="$(arg joystick_fd)"/>
+		<param name="chatter_pub" value="$(arg chatter_pub)"/>
+		<param name="GUI_Pub" value="$(arg GUI_Pub)"/>
+		<param name="loop_rate" value="$(arg loop_rate)"/>
+	</node>
+
+</launch>
