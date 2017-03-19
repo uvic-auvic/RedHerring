@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<robot name="red_herring" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+       <link name="red_herring">
+       <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+                <mesh filename="$(find Gazebo_models)/models/red_herring/red_herring.dae"/>
+        </geometry>
+       </visual>
+
+       <collision>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <geometry>
+                <mesh filename="$(find Gazebo_models)/models/red_herring/red_herring.dae"/>
+        </geometry>
+       </collision>
+
+       <inertial>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+        <mass value="10"/>
+        <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+       </inertial>
+        
+       </link>
+
+</robot>

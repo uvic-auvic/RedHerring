@@ -1,5 +1,0 @@
-<launch>
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find redherring_gazebo)/worlds/gas_station.world"/>
-  </include>
-</launch>
