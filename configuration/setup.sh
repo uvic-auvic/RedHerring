@@ -1,9 +1,10 @@
 # This script installs the full desktop suite of ROS (Robotic Operating System) on Ubuntu 14.04 based systems
 # It should be run as root in order to run uninhibited
 
-# Add ROS and Gazebo7 to sources.list
+# Add ROS, Gazebo7 and Blender to sources.list
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+sudo add-apt-repository ppa:irie/blender
 
 # Add Package Keys to list
 sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116
@@ -37,4 +38,7 @@ echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 
 # Install rosinstall
-sudo apt-get install python-rosinstall
+sudo apt-get install -y python-rosinstall
+
+# Install Blender
+sudo apt-get install blender
