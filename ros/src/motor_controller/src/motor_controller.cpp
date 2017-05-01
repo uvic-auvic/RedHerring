@@ -274,7 +274,7 @@ int main(int argc, char ** argv)
     ros::init(argc, argv, "motor_controller_node");
     ros::NodeHandle nh("~");
 
-    /* Service names and FD names */
+    /* Launchfile parameters */
     std::string MotorForwardServiceName, MotorReverseServiceName, StopMotorsServiceName, StopMotorServiceName,
                 getRPMServiceName, setPWMServiceName, CalibrateMotorsName, fd_serial_port;
 
