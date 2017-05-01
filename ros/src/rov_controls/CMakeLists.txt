@@ -27,3 +27,6 @@ include_directories(
 add_executable(joystick_node src/joystick_node.cpp src/joystick.cpp)
 target_link_libraries(joystick_node ${catkin_LIBRARIES})
 
+add_executable(keyboard_node src/keyboard_node.cpp)
+target_link_libraries(keyboard_node ${catkin_LIBRARIES})
+
