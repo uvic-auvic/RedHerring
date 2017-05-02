@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(joystick)
+project(rov_controls)
+set(CMAKE_CXX_FLAGS "-std=c++11")
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -21,9 +22,11 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_library(joystick include/joystick.cpp)
+#add_library(joystick include/joystick.cpp)
 
-add_executable(joystick_node src/joystick_node.cpp)
+add_executable(joystick_node src/joystick_node.cpp src/joystick.cpp)
 target_link_libraries(joystick_node ${catkin_LIBRARIES})
-add_dependencies(joystick_node red_joystick)
+
+add_executable(keyboard_node src/keyboard_node.cpp)
+target_link_libraries(keyboard_node ${catkin_LIBRARIES})
 

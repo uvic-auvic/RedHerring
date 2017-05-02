@@ -48,6 +48,10 @@ add_executable(motor_controller src/motor_controller.cpp)
 add_dependencies(motor_controller ${motor_controller_EXPORTED_TARGETS})
 target_link_libraries(motor_controller ${catkin_LIBRARIES} ${serial_LIBRARIES})
 
+add_executable(navigation src/navigation.cpp)
+add_dependencies(navigation ${motor_controller_EXPORTED_TARGETS})
+target_link_libraries(navigation ${catkin_LIBRARIES} ${serial_LIBRARIES})
+
 add_executable(motor_controller_client src/motor_controller_client.cpp)
 add_dependencies(motor_controller_client ${motor_controller_EXPORTED_TARGETS})
 target_link_libraries(motor_controller_client ${catkin_LIBRARIES} ${serial_LIBRARIES})

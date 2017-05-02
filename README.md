@@ -1,4 +1,4 @@
-#Welcome to the RedHerring Github wiki!
+# Welcome to the RedHerring Github wiki!
 
 This repository contains the code that will be run on RedHerring, AUVic's Autonomous Underwater Vehicle (AUV)!
 
