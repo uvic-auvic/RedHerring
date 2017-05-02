@@ -12,6 +12,23 @@
 #include <serial/serial.h>
 #include "motor_controller/motor_command.h"
 
+/********************************************************************
+ * Motor Arrangements
+ *
+ * [Top-Down View]
+ *
+ * |||||||||||||||      Motors 1 => Forward
+ * [1]         [2]      Motors 2 => Forward
+ * |||         |||      Motors 3 => Backward
+ * |||         |||      Motors 4 => Backward
+ * [3]         [4]      Motors 5 => Up
+ * |||         |||      Motors 6 => Up
+ * |||         |||
+ * [5]         [6]
+ * |||||||||||||||
+ *
+/********************************************************************/
+
 bool moveForward( motor_controller::motor_command::Request &req,
                   motor_controller::motor_command::Response &res)
 {
