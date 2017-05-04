@@ -7,7 +7,7 @@ This repository contains the code that will be run on RedHerring, AUVic's Autono
 ## Getting Started
 To get started developing for this project, follow the instructions below
 
-[Setting up your environment](https://github.com/uvic-auvic/Software_Sandbox/wiki/Setting-up-your-development-environment)
+[Setting up your environment](https://github.com/uvic-auvic/Software_Sandbox/wiki/Setting-up-your-environment)
 
 [How we use Git](https://github.com/uvic-auvic/Software_Sandbox/wiki/Git-Workflow)
 
