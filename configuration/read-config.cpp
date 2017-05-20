@@ -10,6 +10,12 @@ int main() {
     std::cin >> line_contents;
     const char* linecontents=line_contents.c_str();
     std::ifstream file(line_contents);
+    while(file.fail()){
+        std::cout << "File could not be read. Enter a file name to read: ";
+        std::cin >> line_contents;
+        linecontents=line_contents.c_str();
+        file.open(line_contents);
+    }
     std::string str; 
     int line_number = 0;
     std::map<std::string, std::string> configs;
