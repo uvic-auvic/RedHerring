@@ -22,6 +22,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+# If you want another package to access this library then uncomment
 #add_library(joystick include/joystick.cpp)
 
 add_executable(joystick_node src/joystick_node.cpp src/joystick.cpp)

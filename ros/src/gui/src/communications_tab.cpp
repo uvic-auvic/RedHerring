@@ -13,6 +13,7 @@
 #include <QtGui/QMainWindow>
 
 #include "../include/communications_tab.hpp"
+#include "../include/config.hpp"
 
 /***************************************************************
  * Namespaces
