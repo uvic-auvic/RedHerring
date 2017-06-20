@@ -37,7 +37,12 @@ int main (int argc, char ** argv)
     }
 
     ros::Rate loop_rate(source.GetFPS());
+    source.initOutFile();
 
+    if (!source.video.isOpened()) {
+        ROS_ERROR("Coudn't open video file for writing");
+        return -1;
+    }
     while(nh.ok())
     {
         cv::Mat frame = source.capture();
@@ -47,6 +52,7 @@ int main (int argc, char ** argv)
 
         sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
         publisher.publish(msg);
+        source.video.write(frame);
         cv::waitKey(1);
         ros::spinOnce();
         loop_rate.sleep();
