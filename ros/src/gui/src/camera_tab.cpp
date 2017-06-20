@@ -13,6 +13,7 @@
 #include <QtGui/QMainWindow>
 
 #include "../include/camera_tab.hpp"
+#include "../include/config.hpp"
 
 /***************************************************************
  * Namespaces

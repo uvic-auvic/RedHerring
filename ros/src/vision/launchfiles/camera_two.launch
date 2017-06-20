@@ -6,7 +6,7 @@
         <arg name="fd" default="/dev/video1"/>
         <arg name="pub" default="/camera/two/image"/>
 
-        <node name="image_sender_2" pkg="vision" type="image_sender" required="true">
+        <node name="camera_two" pkg="vision" type="image_sender" required="true">
           <param name="name" value="$(arg name)"/>
           <param name="fd" value="$(arg fd)"/>
           <param name="pub" value="$(arg pub)"/>
