@@ -15,6 +15,17 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   std_msgs
+  message_generation
+)
+
+add_service_files(
+  FILES
+  webcam.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
 )
 
 # This is useful when we want other packages to be able to use this package
@@ -25,7 +36,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
   LIBRARIES vision
-  CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs
+  CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs message_runtime std_msgs
 #  DEPENDS system_lib
 )
 
@@ -38,14 +49,11 @@ include_directories(
 ##############################################################################
 
 # Required packages
-find_package(OpenCV REQUIRED)
+find_package(OpenCV 2 REQUIRED)
 
 # Separate nodes in the package
 add_executable(image_sender src/image_sender.cpp src/webcam.cpp include/video_api.h)
 target_link_libraries(image_sender ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
-
-add_executable(image_sender2 src/image_sender2.cpp src/webcam.cpp include/video_api.h)
-target_link_libraries(image_sender2 ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(image_reciever src/image_reciever.cpp)
 target_link_libraries(image_reciever ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

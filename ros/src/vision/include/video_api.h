@@ -52,6 +52,16 @@ public:
      * Captures the next frame and converts it to a ROS Image format
      */
     virtual cv::Mat capture();
+
+    /*
+     * Inits the file which will be written to
+     */
+    void initOutFile();
+
+    /*
+     * Object which writes the video file
+     */
+    cv::VideoWriter video;
     
 private:
 

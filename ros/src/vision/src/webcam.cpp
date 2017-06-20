@@ -40,7 +40,7 @@ bool VideoSource::SetSource(const std::string source) {
  * @Args     filename
  * @function reads and stores settings from the file passed
  *************************************************************/
-void VideoSource::SetFPS(int fps = 20) {
+void VideoSource::SetFPS(int fps = 15) {
     this->fps = fps;
 }
 
@@ -62,6 +62,19 @@ cv::Mat VideoSource::capture() {
  *************************************************************/
 bool VideoSource::SourceExists(const std::string source) {
     return true;
+}
+
+/*************************************************************
+ * @Name     ReadSettings
+ * @Args     filename
+ * @function reads and stores settings from the file passed
+ *************************************************************/
+void VideoSource::initOutFile() {
+    int width = this->cap.get(CV_CAP_PROP_FRAME_WIDTH);
+    int height = this->cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+    cv::Size size = cv::Size(width, height);
+    int codec = this->cap.get(CV_CAP_PROP_FOURCC);
+    this->video = cv::VideoWriter("~/Documents/test.avi", codec, this->fps, size, true);
 }
 
 
