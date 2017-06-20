@@ -14,6 +14,17 @@
 #include <string>
 
 #include "../include/video_api.h"
+#include "vision/webcam.h"
+
+VideoSource source;
+
+bool record_video(vision::webcam::Request &req, vision::webcam::Response &res) {
+    source.initOutFile();
+    if (!source.video.isOpened()) {
+        ROS_ERROR("Coudn't open video file for writing");
+    }
+    return true;
+}
 
 /*************************************************************
  * Implementation [Image Sender]
@@ -30,19 +41,15 @@ int main (int argc, char ** argv)
     nh.getParam("pub", pub);
     image_transport::Publisher publisher = it.advertise(pub, 5);
 
-    VideoSource source;
+
     if (!source.SetSource(fd)) {
         ROS_ERROR("%s failed to open device on %s", name.c_str(), fd.c_str());
         return -1;
     }
 
     ros::Rate loop_rate(source.GetFPS());
-    source.initOutFile();
+    ros::ServiceServer recordMode = nh.advertiseService("record", record_video);
 
-    if (!source.video.isOpened()) {
-        ROS_ERROR("Coudn't open video file for writing");
-        return -1;
-    }
     while(nh.ok())
     {
         cv::Mat frame = source.capture();
@@ -52,7 +59,9 @@ int main (int argc, char ** argv)
 
         sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", frame).toImageMsg();
         publisher.publish(msg);
-        source.video.write(frame);
+        if (source.video.isOpened()) {
+            source.video.write(frame);
+        }
         cv::waitKey(1);
         ros::spinOnce();
         loop_rate.sleep();

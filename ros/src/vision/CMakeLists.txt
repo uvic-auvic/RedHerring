@@ -15,6 +15,17 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   std_msgs
+  message_generation
+)
+
+add_service_files(
+  FILES
+  webcam.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
 )
 
 # This is useful when we want other packages to be able to use this package
@@ -25,7 +36,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
   LIBRARIES vision
-  CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs
+  CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs message_runtime std_msgs
 #  DEPENDS system_lib
 )
 
