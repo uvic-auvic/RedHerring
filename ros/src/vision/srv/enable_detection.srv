@@ -1,0 +1,3 @@
+bool enable_detector
+---
+bool detector_enabled

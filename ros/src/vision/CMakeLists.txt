@@ -21,6 +21,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   webcam.srv
+  enable_detection.srv
 )
 
 generate_messages(
@@ -57,3 +58,6 @@ target_link_libraries(image_sender ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(image_reciever src/image_reciever.cpp)
 target_link_libraries(image_reciever ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+add_executable(colour_detection src/colour_detection.cpp)
+target_link_libraries(colour_detection ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
