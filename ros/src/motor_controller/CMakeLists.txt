@@ -23,6 +23,11 @@ add_service_files(
    motor_command.srv
 )
 
+add_message_files(
+  FILES
+  keyboard.msg
+)
+
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
    DEPENDENCIES
@@ -44,14 +49,14 @@ ${catkin_INCLUDE_DIRS})
 find_package(serial REQUIRED)
 
 ## Declare a C++ executable
-add_executable(motor_controller src/motor_controller.cpp)
-add_dependencies(motor_controller ${motor_controller_EXPORTED_TARGETS})
-target_link_libraries(motor_controller ${catkin_LIBRARIES} ${serial_LIBRARIES})
+add_executable(controller src/controller.cpp)
+add_dependencies(controller ${motor_controller_EXPORTED_TARGETS})
+target_link_libraries(controller ${catkin_LIBRARIES} ${serial_LIBRARIES})
 
 add_executable(navigation src/navigation.cpp)
 add_dependencies(navigation ${motor_controller_EXPORTED_TARGETS})
 target_link_libraries(navigation ${catkin_LIBRARIES} ${serial_LIBRARIES})
 
-add_executable(motor_controller_client src/motor_controller_client.cpp)
-add_dependencies(motor_controller_client ${motor_controller_EXPORTED_TARGETS})
-target_link_libraries(motor_controller_client ${catkin_LIBRARIES} ${serial_LIBRARIES})
+add_executable(client src/motor_controller_client.cpp)
+add_dependencies(client ${motor_controller_EXPORTED_TARGETS})
+target_link_libraries(client ${catkin_LIBRARIES} ${serial_LIBRARIES})

@@ -53,11 +53,11 @@ include_directories(
 find_package(OpenCV 2 REQUIRED)
 
 # Separate nodes in the package
-add_executable(image_sender src/image_sender.cpp src/webcam.cpp include/video_api.h)
-target_link_libraries(image_sender ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+add_executable(sender src/sender.cpp src/webcam.cpp include/video_api.h)
+target_link_libraries(sender ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
-add_executable(image_reciever src/image_reciever.cpp)
-target_link_libraries(image_reciever ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+add_executable(reciever src/reciever.cpp)
+target_link_libraries(reciever ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(colour_detection src/colour_detection.cpp)
 target_link_libraries(colour_detection ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
