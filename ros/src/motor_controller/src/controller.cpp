@@ -15,7 +15,7 @@
 /********************************************************************
  * Defines
 /********************************************************************/
-#define MAX_NUMBER_OF_MOTORS (6)
+#define MAX_NUMBER_OF_MOTORS (3)
 #define MAX_INDEX_OF_MOTORS (MAX_NUMBER_OF_MOTORS-1)
 
 /********************************************************************
@@ -44,7 +44,7 @@ void setupSerialConnection(std::string fd, int baud_rate = 9600, int timeout = 1
     }
 
     ROS_INFO("Creating serial connection on port: %s, Baud Rate: %d with timeout time: %d", fd.c_str(), baud_rate, timeout);
-    serial_conn = new serial::Serial(fd, (u_int32_t) baud_rate, serial::Timeout::simpleTimeout((timeout)));
+    serial_conn = new serial::Serial(fd, (u_int32_t) baud_rate, serial::Timeout::simpleTimeout(timeout));
 }
 
 /********************************************************************

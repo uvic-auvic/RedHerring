@@ -60,4 +60,5 @@ add_executable(reciever src/reciever.cpp)
 target_link_libraries(reciever ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(colour_detection src/colour_detection.cpp)
+add_dependencies(colour_detection ${vision_EXPORTED_TARGETS})
 target_link_libraries(colour_detection ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
