@@ -1,0 +1,28 @@
+<launch>        
+        <!--Global Argument Definitions-->
+
+        <!--Environment Variables-->
+        <arg name="IS_LOCAL" value="$(optenv ROS_MASTER_LOC true)"/>
+
+        <!-- Enables -->
+        <arg name="enable_camera_node_1" value="true"/>
+        <arg name="enable_camera_node_2" value="false"/>
+
+        <!-- Included Roslaunch Files -->
+
+        <!-- Vision-Image-Sender-1 -->
+        <group if="$(arg enable_camera_node_1)">
+           <include file="$(find vision)/launchfiles/camera_one.launch"/>
+        </group>
+
+        <!-- Vision-Image-Sender-2 -->
+        <group if="$(arg enable_camera_node_2)">
+          <include file="$(find vision)/launchfiles/camera_two.launch"/>
+        </group>
+
+        <!--Motors-->
+        <group if="$(arg override_motor_controllers)">
+          <include file="$(find motor_controller)/launchfiles/motor_controller.launch"/>
+        </group>
+
+</launch>

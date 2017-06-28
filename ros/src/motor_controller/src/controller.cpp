@@ -15,7 +15,7 @@
 /********************************************************************
  * Defines
 /********************************************************************/
-#define MAX_NUMBER_OF_MOTORS (6)
+#define MAX_NUMBER_OF_MOTORS (3)
 #define MAX_INDEX_OF_MOTORS (MAX_NUMBER_OF_MOTORS-1)
 
 /********************************************************************
@@ -44,7 +44,7 @@ void setupSerialConnection(std::string fd, int baud_rate = 9600, int timeout = 1
     }
 
     ROS_INFO("Creating serial connection on port: %s, Baud Rate: %d with timeout time: %d", fd.c_str(), baud_rate, timeout);
-    serial_conn = new serial::Serial(fd, (u_int32_t) baud_rate, serial::Timeout::simpleTimeout((timeout)));
+    serial_conn = new serial::Serial(fd, (u_int32_t) baud_rate, serial::Timeout::simpleTimeout(timeout));
 }
 
 /********************************************************************
@@ -271,32 +271,21 @@ bool calibrateMotor( motor_controller::motor_command::Request &req,
 /********************************************************************/
 int main(int argc, char ** argv)
 {
-    ros::init(argc, argv, "motor_controller_node");
+    ros::init(argc, argv, "motor_con");
     ros::NodeHandle nh("~");
 
-    /* Launchfile parameters */
-    std::string MotorForwardServiceName, MotorReverseServiceName, StopMotorsServiceName, StopMotorServiceName,
-                getRPMServiceName, setPWMServiceName, CalibrateMotorsName, fd_serial_port;
-
-    nh.getParam("fd", fd_serial_port);
+    // From Launchfile
+    std::string fd_serial_port = "/dev/";
     setupSerialConnection(fd_serial_port);
 
-    nh.getParam("MotorForwardService", MotorForwardServiceName);
-    nh.getParam("MotorReverseService", MotorReverseServiceName);
-    nh.getParam("StopMotorsService"  ,   StopMotorsServiceName);
-    nh.getParam("StopMotorService"   ,   StopMotorServiceName);
-    nh.getParam("getRPMService"      ,       getRPMServiceName);
-    nh.getParam("setPWMService"      ,       setPWMServiceName);
-    nh.getParam("CalibrateMotors"    ,     CalibrateMotorsName);
-
     /* Setup all the Different services/commands which we  can call. Each service does its own error handling */
-    ros::ServiceServer setMotorForwardService = nh.advertiseService(MotorForwardServiceName, setMotorForward);
-    ros::ServiceServer setMotorReverseService = nh.advertiseService(MotorReverseServiceName, setMotorReverse);
-    ros::ServiceServer stopAllMotorsService   = nh.advertiseService(StopMotorsServiceName  , stopAllMotors);
-    ros::ServiceServer stopMotorService       = nh.advertiseService(StopMotorServiceName   , stopMotor);
-    ros::ServiceServer getRPMService          = nh.advertiseService(getRPMServiceName      , getRPM);
-    ros::ServiceServer setPWMService          = nh.advertiseService(setPWMServiceName      , setPWM);
-    ros::ServiceServer calibrateMotorService  = nh.advertiseService(CalibrateMotorsName    , calibrateMotor);
+    ros::ServiceServer setMotorForwardService = nh.advertiseService("setMotorForward", setMotorForward);
+    ros::ServiceServer setMotorReverseService = nh.advertiseService("setMotorReverse", setMotorReverse);
+    ros::ServiceServer stopAllMotorsService   = nh.advertiseService("stopAllMotors", stopAllMotors);
+    ros::ServiceServer stopMotorService       = nh.advertiseService("stopMotors", stopMotor);
+    ros::ServiceServer getRPMService          = nh.advertiseService("getRPM", getRPM);
+    ros::ServiceServer setPWMService          = nh.advertiseService("setRPM", setPWM);
+    ros::ServiceServer calibrateMotorService  = nh.advertiseService("calibrateMotor", calibrateMotor);
 
     /* Wait for callbacks */
     ros::spin();

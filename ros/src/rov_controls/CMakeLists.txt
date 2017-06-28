@@ -8,13 +8,14 @@ set(CMAKE_CXX_FLAGS "-std=c++11")
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  message_runtime
+  motor_controller
 )
-
 
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES red_joystick
-#  CATKIN_DEPENDS roscpp std_msgs
+  CATKIN_DEPENDS roscpp std_msgs message_runtime
 #  DEPENDS system_lib
 )
 
@@ -22,12 +23,10 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-# If you want another package to access this library then uncomment
-#add_library(joystick include/joystick.cpp)
-
 add_executable(joystick_node src/joystick_node.cpp src/joystick.cpp)
 target_link_libraries(joystick_node ${catkin_LIBRARIES})
 
 add_executable(keyboard_node src/keyboard_node.cpp)
 target_link_libraries(keyboard_node ${catkin_LIBRARIES})
+add_dependencies(keyboard_node ${motor_controller_EXPORTED_TARGETS})
 

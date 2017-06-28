@@ -6,41 +6,7 @@
 #include <stdio.h>
 #include <ros/console.h>
 #include <string.h>
-
-//KB Code Defines
-/*
-#define KEYCODE_NUM0    0x60
-#define KEYCODE_NUM1    0x61
-#define KEYCODE_NUM2    0x62
-#define KEYCODE_NUM3    0x63
-#define KEYCODE_NUM4    0x64
-#define KEYCODE_NUM5    0x65
-#define KEYCODE_NUM6    0x66
-#define KEYCODE_NUM7    0x67
-#define KEYCODE_NUM8    0x68
-#define KEYCODE_NUM9    0x69
-#define KEYCODE_NUMDIV  0x6F
-#define KEYCODE_NUMMUL  0x6A
-#define KEYCODE_SUB     0x6D
-#define KEYCODE_ADD     0x6B
-#define KEYCODE_NUMDOT  0x6E
-*/
-
-#define KEYCODE_0       0x30
-#define KEYCODE_1       0x31
-#define KEYCODE_2       0x32
-#define KEYCODE_3       0x33
-#define KEYCODE_4       0x34
-#define KEYCODE_5       0x35
-#define KEYCODE_6       0x36
-#define KEYCODE_7       0x37
-#define KEYCODE_8       0x38
-#define KEYCODE_9       0x39
-#define KEYCODE_DIV     0x2F
-#define KEYCODE_MUL     0x2A
-#define KEYCODE_ADD     0x2B
-#define KEYCODE_SUB     0x2D
-#define KEYCODE_DOT     0x2E
+#include "motor_controller/keyboard.h"
 
 //Globals
 int kfd = 0;
@@ -58,20 +24,7 @@ void quit(int sig)
 
 int main(int argc, char **argv)
 {
-    //Variables
     char KB_char = '\0';
-
-    //Actual Code
-    ros::init(argc,argv,"rov_keyboard");
-    ros::NodeHandle n;
-    ros::Rate loop_rate(1);
-    std_msgs::String msg;
-    std::stringstream guiss;
-
-    signal(SIGINT,quit);
-
-    ROS_INFO("KEYBOARD INPUT NODE ONLINE");
-
     //Get the console in raw mode
     tcgetattr(kfd, &cooked);
     memcpy(&raw, &cooked, sizeof(struct termios));
@@ -81,34 +34,51 @@ int main(int argc, char **argv)
     raw.c_cc[VEOF] = 2;
     tcsetattr(kfd, TCSANOW, &raw);
 
+    // ROS Setup
+    ros::init(argc,argv,"rov_keyboard");
+    ros::NodeHandle nh("~");
+    ros::Publisher pub = nh.advertise<motor_controller::keyboard>("keyboard_input", 20);
+    motor_controller::keyboard keyboard_input;
+    signal(SIGINT, quit);
+
+    ROS_INFO("KEYBOARD INPUT NODE ONLINE");    
+
     while(ros::ok())
     {
-        //ROS_INFO("BOOP");
-        //ros::spinOnce();
-
         // get the next event from the keyboard
         if(read(kfd, &KB_char, 1) < 0)
         {
           ROS_ERROR("read():");
-          exit(-1);
+          //exit(-1);
         }
 
-        //ROS_DEBUG("value: 0x%02X\n", KB_char);
         ROS_INFO("Code: %c %x", KB_char, KB_char);
+        keyboard_input.direction = KB_char;
 
         switch(KB_char)
         {
-            case KEYCODE_0:
-                ROS_INFO("LEFT");
-                break;
+        case motor_controller::keyboard::Forward:
+            ROS_INFO("Forward");
+            pub.publish(keyboard_input);
+            break;
 
-            default:
-                ROS_DEBUG("Code: %c", KB_char);
-                break;
+        case motor_controller::keyboard::Backward:
+            ROS_INFO("Back");
+            pub.publish(keyboard_input);
+            break;
+
+        case motor_controller::keyboard::left:
+            ROS_INFO("Left");
+            pub.publish(keyboard_input);
+            break;
+
+        case motor_controller::keyboard::right:
+            ROS_INFO("Right");
+            pub.publish(keyboard_input);
+            break;
         }
         ros::spinOnce();
-        //loop_rate.sleep();
     }
 
-    return(0);
+    return 0;
 }
