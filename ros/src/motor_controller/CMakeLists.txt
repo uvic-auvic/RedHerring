@@ -57,6 +57,6 @@ add_executable(navigation src/navigation.cpp)
 add_dependencies(navigation ${motor_controller_EXPORTED_TARGETS})
 target_link_libraries(navigation ${catkin_LIBRARIES} ${serial_LIBRARIES})
 
-add_executable(client src/motor_controller_client.cpp)
+add_executable(client src/client.cpp)
 add_dependencies(client ${motor_controller_EXPORTED_TARGETS})
 target_link_libraries(client ${catkin_LIBRARIES} ${serial_LIBRARIES})
