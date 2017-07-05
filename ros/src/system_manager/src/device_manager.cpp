@@ -17,6 +17,7 @@ void closeSerialConnection()
     {
         serial_conn->close();
         delete serial_conn;
+        serial_conn = nullptr;
     }
 }
 
@@ -42,9 +43,10 @@ std::string serial_out(std::string serial_out_string, bool expect_response)
 void getNameOfDevice(std::string fd)
 {
     setupSerialConnection(fd);
-    std::string rid_result = serial_out("RID\n", false);
-    if (!rid_result.empty() && rid_result != "") {
+    std::string rid_result = serial_out("RID\n", true);
+    if (!rid_result.empty()) {
         file_descriptors[rid_result] = fd;
+        ROS_INFO("Device on %s identifies as %s", fd.c_str(), rid_result.c_str() );
     }
     
 }
