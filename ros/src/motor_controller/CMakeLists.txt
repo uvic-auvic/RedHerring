@@ -51,13 +51,13 @@ find_package(serial REQUIRED)
 
 ## Declare a C++ executable
 add_executable(controller src/controller.cpp)
-add_dependencies(controller ${motor_controller_EXPORTED_TARGETS})
+add_dependencies(controller ${motor_controller_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(controller ${catkin_LIBRARIES} ${serial_LIBRARIES})
 
 add_executable(navigation src/navigation.cpp)
-add_dependencies(navigation ${motor_controller_EXPORTED_TARGETS})
+add_dependencies(navigation ${motor_controller_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(navigation ${catkin_LIBRARIES} ${serial_LIBRARIES})
 
 add_executable(client src/client.cpp)
-add_dependencies(client ${motor_controller_EXPORTED_TARGETS})
+add_dependencies(client ${motor_controller_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(client ${catkin_LIBRARIES} ${serial_LIBRARIES})
