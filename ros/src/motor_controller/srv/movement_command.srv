@@ -1,0 +1,4 @@
+uint16 degrees
+uint8 time
+---
+bool exec_status

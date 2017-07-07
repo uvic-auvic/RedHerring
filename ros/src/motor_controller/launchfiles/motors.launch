@@ -1,0 +1,15 @@
+<launch>        
+        <!-- Motor Controller Node -->
+
+        <!-- Arguments (Overrideable)-->
+        <arg name="MotorForwardService" default="setMotorForward"/>
+
+        <node name="motor_left" pkg="motor_controller" type="motor_controller" required="true">
+          <param name="motor_controller_fd" value="$(arg motor_controller_fd)"/>
+        </node>
+
+        <node name="motor_right" pkg="motor_controller" type="motor_controller" required="true">
+          <param name="motor_controller_fd" value="$(arg motor_controller_fd)"/>
+        </node>
+
+</launch>
