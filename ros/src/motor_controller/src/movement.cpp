@@ -19,52 +19,90 @@
 bool timer_requested = false;
 int countdown_timer = 0;
 
+motor_controller::motor_command generateMotorCommand(int motor_number, int command_param)
+{
+    motor_controller::motor_command srv;
+    srv.request.motor_number = motor_number;
+    srv.request.command_param = command_param;
+    return srv;
+}
+
 void convertDegreesToTime()
 {
   return;
 }
 
-bool Forward( motor_controller::movement_command::Request &req,
-              motor_controller::movement_command::Response &res)
+class motor_client
 {
-  return true;
-}
+public:
+    ros::NodeHandle nh;
+    ros::ServiceClient forward;
+    ros::ServiceClient reverse;
+    ros::ServiceClient stopMotors;
+    ros::ServiceClient stopMotor;
+    ros::ServiceClient getRPM;
+    motor_client(std::string motor_conn_name)
+    {
+        forward = nh.serviceClient<motor_controller::motor_command>("/" + motor_conn_name + "/setMotorForward");
+        reverse = nh.serviceClient<motor_controller::motor_command>("/" + motor_conn_name + "/setMotorReverse");
+        stopMotors = nh.serviceClient<motor_controller::motor_command>("/" + motor_conn_name + "/stopAllMotors");
+        stopMotor = nh.serviceClient<motor_controller::motor_command>("/" + motor_conn_name + "/stopMotor");
+        getRPM = nh.serviceClient<motor_controller::motor_command>("/" + motor_conn_name + "/getRPM");
+    }
 
-bool Backward( motor_controller::movement_command::Request &req,
+};
+
+class movement_controller
+{
+public:
+    motor_client left_controller = motor_client("motor_left");
+    motor_client right_controller = motor_client("motor_right");
+
+    // Service Call Definitions
+    bool Forward( motor_controller::movement_command::Request &req,
+                  motor_controller::movement_command::Response &res)
+    {
+
+    }
+
+    bool Backward( motor_controller::movement_command::Request &req,
+                   motor_controller::movement_command::Response &res)
+    {
+      return true;
+    }
+
+    bool Left( motor_controller::movement_command::Request &req,
                motor_controller::movement_command::Response &res)
-{
-  return true;
-}
+    {
+      return true;
+    }
 
-bool Left( motor_controller::movement_command::Request &req,
-           motor_controller::movement_command::Response &res)
-{
-  return true;
-}
+    bool Right( motor_controller::movement_command::Request &req,
+                motor_controller::movement_command::Response &res)
+    {
+      return true;
+    }
 
-bool Right( motor_controller::movement_command::Request &req,
-            motor_controller::movement_command::Response &res)
-{
-  return true;
-}
+    bool RotateClockwise( motor_controller::movement_command::Request &req,
+                          motor_controller::movement_command::Response &res)
+    {
+      return true;
+    }
 
-bool RotateClockwise( motor_controller::movement_command::Request &req,
-                      motor_controller::movement_command::Response &res)
-{
-  return true;
-}
+    bool RotateCounterClockwise( motor_controller::movement_command::Request &req,
+                                 motor_controller::movement_command::Response &res)
+    {
+      return true;
+    }
 
-bool RotateCounterClockwise( motor_controller::movement_command::Request &req,
-                             motor_controller::movement_command::Response &res)
-{
-  return true;
-}
+    bool MoveToPosition( motor_controller::movement_command::Request &req,
+                         motor_controller::movement_command::Response &res)
+    {
+      return true;
+    }
 
-bool MoveToPosition( motor_controller::movement_command::Request &req,
-                     motor_controller::movement_command::Response &res)
-{
-  return true;
-}
+};
+
 
 /********************************************************************
  * Implementation [Main]
@@ -73,32 +111,18 @@ bool MoveToPosition( motor_controller::movement_command::Request &req,
 /********************************************************************/
 int main(int argc, char ** argv)
 {
-
     ros::init(argc, argv, "motor_controller_navigation");
     ros::NodeHandle nh("~");
+    movement_controller controller;
 
     // Services
-    ros::ServiceServer MoveForward  = nh.advertiseService("MoveForward", Forward);
-    ros::ServiceServer MoveBackward = nh.advertiseService("MoveBackward", Backward);
-    ros::ServiceServer MoveLeft     = nh.advertiseService("MoveLeft", Left);
-    ros::ServiceServer MoveRight    = nh.advertiseService("MoveRight", Right);
-    ros::ServiceServer CW           = nh.advertiseService("YawCW", RotateClockwise);
-    ros::ServiceServer CCW          = nh.advertiseService("YawCCW", RotateCounterClockwise);
-    ros::ServiceServer Move         = nh.advertiseService("MoveToPosition", MoveToPosition);
-
-    // Motor Left Clients
-    ros::ServiceClient leftMotorForwardClient = nh.serviceClient<motor_controller::motor_command>("/motor_left/setMotorForward");
-    ros::ServiceClient leftMotorReverseClient = nh.serviceClient<motor_controller::motor_command>("/motor_left/setMotorReverse");
-    ros::ServiceClient leftStopMotorsClient = nh.serviceClient<motor_controller::motor_command>("/motor_left/stopAllMotors");
-    ros::ServiceClient leftStopMotorClient = nh.serviceClient<motor_controller::motor_command>("/motor_left/stopMotor");
-    ros::ServiceClient leftGetRPM = nh.serviceClient<motor_controller::motor_command>("/motor_left/getRPM");
-
-    // Motor Right Clients
-    ros::ServiceClient rightMotorForwardClient = nh.serviceClient<motor_controller::motor_command>("/motor_right/setMotorForward");
-    ros::ServiceClient rightMotorReverseClient = nh.serviceClient<motor_controller::motor_command>("/motor_right/setMotorReverse");
-    ros::ServiceClient rightStopMotorsClient = nh.serviceClient<motor_controller::motor_command>("/motor_right/stopAllMotors");
-    ros::ServiceClient rightStopMotorClient = nh.serviceClient<motor_controller::motor_command>("/motor_right/stopMotor");
-    ros::ServiceClient rightGetRPM = nh.serviceClient<motor_controller::motor_command>("/motor_right/getRPM");
+    ros::ServiceServer MoveForward  = nh.advertiseService("MoveForward", &movement_controller::Forward, &controller);
+    ros::ServiceServer MoveBackward = nh.advertiseService("MoveBackward", &movement_controller::Backward, &controller);
+    ros::ServiceServer MoveLeft     = nh.advertiseService("MoveLeft", &movement_controller::Left, &controller);
+    ros::ServiceServer MoveRight    = nh.advertiseService("MoveRight", &movement_controller::Right, &controller);
+    ros::ServiceServer CW           = nh.advertiseService("YawCW", &movement_controller::RotateClockwise, &controller);
+    ros::ServiceServer CCW          = nh.advertiseService("YawCCW", &movement_controller::RotateCounterClockwise, &controller);
+    ros::ServiceServer Move         = nh.advertiseService("MoveToPosition", &movement_controller::MoveToPosition, &controller);
 
     // TODO: Parameterize
     // Set default motor speeds
