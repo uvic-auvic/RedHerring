@@ -85,13 +85,23 @@ public:
 
     void up(int power)
     {
-        motor_controller::motor_command mup = generateMotorCommand(motor_side, power);
-        this->forward.call(mup);
+        setMotorForward(motor_side, power);
     }
 
     void down(int power)
     {
-        motor_controller::motor_command mdown = generateMotorCommand(motor_side, power);
+        setMotorReverse(motor_side, power);
+    }
+
+    void setMotorForward(int motor, int power)
+    {
+        motor_controller::motor_command mup = generateMotorCommand(motor, power);
+        this->forward.call(mup);
+    }
+
+    void setMotorReverse(int motor, int power)
+    {
+        motor_controller::motor_command mdown = generateMotorCommand(motor, power);
         this->reverse.call(mdown);
     }
 
@@ -205,8 +215,8 @@ int main(int argc, char ** argv)
     ros::ServiceServer MoveBackward = nh.advertiseService("MoveBackward", &movement_controller::Backward, &controller);
     ros::ServiceServer MoveLeft     = nh.advertiseService("MoveLeft", &movement_controller::Left, &controller);
     ros::ServiceServer MoveRight    = nh.advertiseService("MoveRight", &movement_controller::Right, &controller);
-    ros::ServiceServer CW           = nh.advertiseService("YawCW", &movement_controller::RotateClockwise, &controller);
-    ros::ServiceServer CCW          = nh.advertiseService("YawCCW", &movement_controller::RotateCounterClockwise, &controller);
+    ros::ServiceServer CW           = nh.advertiseService("RotateClockwise", &movement_controller::RotateClockwise, &controller);
+    ros::ServiceServer CCW          = nh.advertiseService("RotateCounterClockwise", &movement_controller::RotateCounterClockwise, &controller);
     ros::ServiceServer Move         = nh.advertiseService("MoveToPosition", &movement_controller::MoveToPosition, &controller);
 
     /* Wait for callbacks */

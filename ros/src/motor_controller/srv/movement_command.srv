@@ -1,4 +1,5 @@
 uint16 degrees
 uint8 time
+position position
 ---
 bool exec_status
