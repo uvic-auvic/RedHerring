@@ -10,12 +10,17 @@
 #include <ros/ros.h>
 #include <string>
 #include <serial/serial.h>
+#include <math.h>
 #include "motor_controller/motor_command.h"
 #include "motor_controller/movement_command.h"
+#include "motor_controller/position.h"
 
-/********************************************************************
- * Global Variables
-/********************************************************************/
+enum movement_mode 
+{
+    FAR_AWAY,               //0
+    STRAIGHT_AHEAD,         //1
+    CLOSE_VICINITY          //2
+};
 
 class motor_client
 {
@@ -105,6 +110,12 @@ public:
         this->reverse.call(mdown);
     }
 
+    void setMotorsStop()
+    {
+        motor_controller::motor_command stop_msg = generateMotorCommand(0, 0);
+        this->stopAllMotors.call(stop_msg)
+    }
+
     int getReducedPower(int speed)
     {
         return (int) speed * reverse_motor_multiplier;
@@ -129,6 +140,7 @@ public:
         right_controller(motor_client("motor_right"))
     {
         nh.getParam("default_power", default_power);
+        nh.getParam("max_speed_for_default", max_ms_at_default)
     }
 
     // Service Call Definitions
@@ -183,12 +195,66 @@ public:
     bool MoveToPosition( motor_controller::movement_command::Request &req,
                          motor_controller::movement_command::Response &res)
     {
-      return true;
+        // Find how long it will take us to ascend
+        int time_y = req.y / max_ms_at_default
+        // ignore height in these calculations 
+        float distance = sqrt(pow(req.pos.x, 2) + pow(req.pos.z, 2));
+        movement_mode mode = CLOSE_VICINITY;
+        if (distance > 5) // if we're further than 5m
+        {                           //                                    ^
+            if (abs(req.pos.x) > 1) // if we need to move more than 1m in x
+            {
+                mode = FAR_AWAY;
+            } 
+            else 
+            {
+                mode = STRAIGHT_AHEAD
+            }
+        }
+
+        switch (mode)
+        {
+            case CLOSE_VICINITY: break;
+            case FAR_AWAY: break;
+
+            case STRAIGHT_AHEAD: 
+                int time = abs(req.z) / max_ms_at_default; // time = distance/max_speed
+                float time_y_normalized = (float) time_y / time;
+                int vert_power = (int) time_y_normalized * default_power;
+                motor_controller::movement_command::Request new_req;
+                motor_controller::movement_command::Response new_res;
+                for (int i=0; i<time; i++)
+                {
+                    this->moveVertical(req.y, vert_power);
+                    this->Forward(new_req, new_res); // just to make sure we're still moving
+                }
+                stop();
+                break;
+        }
+        //cramers rule
+        float determinant = -2 // assuming all motors are at 90 degree angles
+        //float left_motor_scalar = 
+        return true;
     }
 
-    void convertDegreesToTime()
+    void moveVertical(int z_position, int vertical_motor_power)
     {
-      return;
+        if (z_position > 0)
+            {
+                left_controller.up(vertical_motor_power);
+                right_controller.up(vertical_motor_power);
+            }
+            else
+            {
+                left_controller.down(vertical_motor_power);
+                right_controller.down(vertical_motor_power);
+            }
+    }
+
+    void stop()
+    {
+        left_controller.setMotorsStop();
+        right_controller.setMotorsStop();
     }
 
 private:
@@ -196,6 +262,7 @@ private:
     motor_client left_controller;
     motor_client right_controller;
     int default_power;
+    float max_ms_at_default;
 };
 
 
