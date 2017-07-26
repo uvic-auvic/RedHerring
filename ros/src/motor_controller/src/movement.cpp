@@ -11,6 +11,8 @@
 #include <string>
 #include <serial/serial.h>
 #include <math.h>
+#include <thread>
+#include <chrono>
 #include "motor_controller/motor_command.h"
 #include "motor_controller/movement_command.h"
 #include "motor_controller/position.h"
@@ -20,6 +22,13 @@ enum movement_mode
     FAR_AWAY,               //0
     STRAIGHT_AHEAD,         //1
     CLOSE_VICINITY          //2
+};
+
+enum motor_numbers
+{
+    motor_front,            //0
+    motor_side,             //1
+    motor_back              //2
 };
 
 class motor_client
@@ -113,7 +122,7 @@ public:
     void setMotorsStop()
     {
         motor_controller::motor_command stop_msg = generateMotorCommand(0, 0);
-        this->stopAllMotors.call(stop_msg)
+        this->stopMotors.call(stop_msg);
     }
 
     int getReducedPower(int speed)
@@ -123,12 +132,6 @@ public:
 
 private:
     float reverse_motor_multiplier;
-
-    // Motor positions, parameterize
-    int motor_front = 0;
-    int motor_back = 2;
-    int motor_side = 1;
-
 };
 
 class movement_controller
@@ -140,7 +143,7 @@ public:
         right_controller(motor_client("motor_right"))
     {
         nh.getParam("default_power", default_power);
-        nh.getParam("max_speed_for_default", max_ms_at_default)
+        nh.getParam("max_speed_for_default", max_ms_at_default);
     }
 
     // Service Call Definitions
@@ -195,45 +198,127 @@ public:
     bool MoveToPosition( motor_controller::movement_command::Request &req,
                          motor_controller::movement_command::Response &res)
     {
-        // Find how long it will take us to ascend
-        int time_y = req.y / max_ms_at_default
         // ignore height in these calculations 
         float distance = sqrt(pow(req.pos.x, 2) + pow(req.pos.z, 2));
         movement_mode mode = CLOSE_VICINITY;
         if (distance > 5) // if we're further than 5m
-        {                           //                                    ^
+        {                                     
             if (abs(req.pos.x) > 1) // if we need to move more than 1m in x
             {
                 mode = FAR_AWAY;
             } 
             else 
             {
-                mode = STRAIGHT_AHEAD
+                mode = STRAIGHT_AHEAD;
             }
         }
 
+        // boilerplate msg. Not really imporant what the values are (they're ignored)
+        motor_controller::movement_command::Request new_req;
+        motor_controller::movement_command::Response new_res;
+
+        // Find how long it will take us to ascend
+        int time_y = abs(req.pos.y) / max_ms_at_default;
+        int time_x = abs(req.pos.x) / max_ms_at_default;
+        int time_z = abs(req.pos.z) / max_ms_at_default;
+
+
         switch (mode)
         {
-            case CLOSE_VICINITY: break;
-            case FAR_AWAY: break;
-
-            case STRAIGHT_AHEAD: 
-                int time = abs(req.z) / max_ms_at_default; // time = distance/max_speed
-                float time_y_normalized = (float) time_y / time;
-                int vert_power = (int) time_y_normalized * default_power;
-                motor_controller::movement_command::Request new_req;
-                motor_controller::movement_command::Response new_res;
-                for (int i=0; i<time; i++)
+            case CLOSE_VICINITY:
+            {
+                // Moving manually in each direction will be more precise here
+                // Left/Right, Up/Down then forwards 
+                for (int i=0; i<time_x; i++) // X
                 {
-                    this->moveVertical(req.y, vert_power);
-                    this->Forward(new_req, new_res); // just to make sure we're still moving
+                    if (req.pos.x > 0)
+                    {
+                        this->Right(new_req, new_res);
+                    } else
+                    {
+                        this->Left(new_req, new_res);
+                    }
+                    this->sleep(900);
+                }
+                this->stop();
+
+                for (int i=0; i<time_y; i++) // Y
+                {
+                    this->moveVertical(req.pos.y, default_power);
+                    this->sleep(1000);
+                }
+                this->stop();
+
+                for (int i=0; i<time_z; i++) // z
+                {
+                    this->Forward(new_req, new_res);
+                    sleep(1000);
+                }
+                this->stop();
+            }
+            break;
+
+            case FAR_AWAY:
+            {
+                float x_hat = req.pos.x / distance;
+                float y_hat = req.pos.y / distance;
+
+                float x_unit_vector = 2 / distance;
+                float y_unit_vector = y_hat - abs(x_hat - x_unit_vector);
+
+                // cramers rule
+                int determinant = -2; // assuming all 4 motors are at 90 degree angles
+                float motor_top_per = -(x_unit_vector + y_unit_vector) / determinant;
+                float motor_bot_per = (y_unit_vector - x_unit_vector) / determinant;
+                float lone_motor_per = y_hat - motor_bot_per;
+                // determine motor percentages so that they make the correct vector
+                int motor_top_power = (int) abs(lone_motor_per/motor_top_per) * default_power;
+                int motor_bot_power = (int) abs(motor_bot_per/motor_top_per) * motor_top_power;
+                // My piss-poor attempt at arriving at the y position at the same time as the z
+                int total_time = distance / max_ms_at_default;
+                float time_y_normalized = (float) time_y / total_time;
+                int vert_power = (int) time_y_normalized * default_power;
+                if (req.pos.x > 0) 
+                {   // going right
+                    for (int i=0; i<total_time; i++)
+                    {
+                        left_controller.setMotorForward(motor_front, motor_top_power);
+                        left_controller.setMotorReverse(motor_back, motor_bot_power);
+                        right_controller.setMotorForward(motor_back, default_power);
+                        this->moveVertical(req.pos.z, vert_power);
+                        this->sleep(900);
+                    }
+                } else 
+                {   // going left
+                    for (int i=0; i<total_time; i++)
+                    {
+                        right_controller.setMotorForward(motor_front, motor_top_power);
+                        right_controller.setMotorReverse(motor_back, motor_bot_power);
+                        left_controller.setMotorForward(motor_back, default_power);
+                        this->moveVertical(req.pos.z, vert_power);
+                        this->sleep(900);
+                    }
                 }
                 stop();
-                break;
+            } 
+            break;
+
+            case STRAIGHT_AHEAD:
+            {
+                // a slightly less piss-poor attempt at slowing down z in order to get to the right position at once
+                float time_y_normalizedd = (float) time_y / time_z; 
+                int vertical_power = (int) time_y_normalizedd * default_power; 
+                
+                for (int i=0; i<time_z; i++)
+                {
+                    this->moveVertical(req.pos.y, vertical_power);
+                    this->Forward(new_req, new_res); // just to make sure we're still moving
+                    this->sleep(950); // accounting for all the ROS+Motor overhead
+                }
+                stop();
+            }
+            break;
         }
-        //cramers rule
-        float determinant = -2 // assuming all motors are at 90 degree angles
-        //float left_motor_scalar = 
         return true;
     }
 
@@ -255,6 +340,11 @@ public:
     {
         left_controller.setMotorsStop();
         right_controller.setMotorsStop();
+    }
+
+    void sleep(int milliseconds)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
     }
 
 private:
