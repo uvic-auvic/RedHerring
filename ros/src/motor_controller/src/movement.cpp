@@ -195,6 +195,20 @@ public:
         return true;
     }
 
+    bool moveUp( motor_controller::movement_command::Request &req,
+                 motor_controller::movement_command::Response &res)
+    {
+        moveVertical(5, default_power);
+        return true;
+    }
+
+    bool moveDown( motor_controller::movement_command::Request &req,
+                   motor_controller::movement_command::Response &res)
+    {
+        moveVertical(-5, default_power);
+        return true;
+    }
+
     bool MoveToPosition( motor_controller::movement_command::Request &req,
                          motor_controller::movement_command::Response &res)
     {
@@ -363,7 +377,7 @@ private:
 /********************************************************************/
 int main(int argc, char ** argv)
 {
-    ros::init(argc, argv, "motor_controller_navigation");
+    ros::init(argc, argv, "auv_nav");
     ros::NodeHandle nh("~");
     movement_controller controller;
 
@@ -375,6 +389,9 @@ int main(int argc, char ** argv)
     ros::ServiceServer CW           = nh.advertiseService("RotateClockwise", &movement_controller::RotateClockwise, &controller);
     ros::ServiceServer CCW          = nh.advertiseService("RotateCounterClockwise", &movement_controller::RotateCounterClockwise, &controller);
     ros::ServiceServer Move         = nh.advertiseService("MoveToPosition", &movement_controller::MoveToPosition, &controller);
+    ros::ServiceServer up           = nh.advertiseService("MoveUp", &movement_controller::MoveToPosition, &controller);
+    ros::ServiceServer down         = nh.advertiseService("MoveDown", &movement_controller::MoveToPosition, &controller);
+    ros::ServiceServer stop         = nh.advertiseService("stopMotors", &movement_controller::MoveToPosition, &controller);
 
     /* Wait for callbacks */
     ros::spin();

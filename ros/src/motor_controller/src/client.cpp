@@ -1,6 +1,6 @@
 #include <ros/ros.h>
 #include <iostream>
-#include "motor_controller/motor_command.h"
+#include "motor_controller/movement_command.h"
 #include "motor_controller/keyboard.h"
 
 using keyboard_msg = motor_controller::keyboard;
@@ -22,18 +22,17 @@ int main(int argc, char ** argv)
     message_reciever msg;
     ros::Subscriber sub = nh.subscribe<motor_controller::keyboard>("/rov_keyboard/keyboard_input", 20, &message_reciever::setMessage, &msg);
 
-    ros::ServiceClient setMotorForwardclient = nh.serviceClient<motor_controller::motor_command>("/motor_con/setMotorForward");
-    ros::ServiceClient setMotorReverseclient = nh.serviceClient<motor_controller::motor_command>("/motor_con/setMotorReverse");
-    ros::ServiceClient stopAllMotorsclient   = nh.serviceClient<motor_controller::motor_command>("/motor_con/stopAllMotors");
-    ros::ServiceClient stopMotorclient       = nh.serviceClient<motor_controller::motor_command>("/motor_con/stopMotor");
-    ros::ServiceClient getRPMclient          = nh.serviceClient<motor_controller::motor_command>("/motor_con/getRPM");
-    ros::ServiceClient setPWMclient          = nh.serviceClient<motor_controller::motor_command>("/motor_con/setPWM");
-    ros::ServiceClient calibrateMotorclient  = nh.serviceClient<motor_controller::motor_command>("/motor_con/calibrateMotor");
+    ros::ServiceClient forward = nh.serviceClient<motor_controller::movement_command>("/auv_nav/MoveForward");
+    ros::ServiceClient backward = nh.serviceClient<motor_controller::movement_command>("/auv_nav/MoveBackward");
+    ros::ServiceClient left   = nh.serviceClient<motor_controller::movement_command>("/auv_nav/MoveLeft");
+    ros::ServiceClient right       = nh.serviceClient<motor_controller::movement_command>("/auv_nav/MoveRight");
+    ros::ServiceClient rotateLeft   = nh.serviceClient<motor_controller::movement_command>("/auv_nav/RotateCounterClockwise");
+    ros::ServiceClient rotateRight       = nh.serviceClient<motor_controller::movement_command>("/auv_nav/RotateClockwise");
+    ros::ServiceClient up          = nh.serviceClient<motor_controller::movement_command>("/auv_nav/MoveUp");
+    ros::ServiceClient down          = nh.serviceClient<motor_controller::movement_command>("/auv_nav/MoveDown");
+    ros::ServiceClient stop  = nh.serviceClient<motor_controller::movement_command>("/auv_nav/stopMotors");
     
-    motor_controller::motor_command srv;
-    srv.request.motor_number = 4;
-    srv.request.command_param = 100;
-
+    motor_controller::movement_command srv;
 
     while (ros::ok())
     {
@@ -44,48 +43,39 @@ int main(int argc, char ** argv)
             switch(kb_msg)
             {
             case motor_controller::keyboard::Forward:
-                if (setMotorForwardclient.call(srv))
-                {
-                    ROS_INFO("%s", srv.response.motor_response.c_str());
-                }
-                else
-                {
-                    ROS_WARN("Failed");
-                }
+                forward.call(srv);
                 break;
 
             case motor_controller::keyboard::Backward:
-                if (setMotorReverseclient.call(srv))
-                {
-                    ROS_INFO("%s", srv.response.motor_response.c_str());
-                }
-                else
-                {
-                    ROS_WARN("Failed");
-                }
-
+                backward.call(srv);
                 break;
 
-            case motor_controller::keyboard::left:
-                if (stopAllMotorsclient.call(srv))
-                {
-                    ROS_INFO("%s", srv.response.motor_response.c_str());
-                }
-                else
-                {
-                    ROS_WARN("Failed");
-                }
+            case motor_controller::keyboard::Left:
+                left.call(srv);
                 break;
                    
-            case motor_controller::keyboard::right:
-                if (stopAllMotorsclient.call(srv))
-                {
-                    ROS_INFO("%s", srv.response.motor_response.c_str());
-                }
-                else
-                {
-                    ROS_WARN("Failed");
-                }
+            case motor_controller::keyboard::Right:
+                right.call(srv);
+                break;
+
+            case motor_controller::keyboard::RotateCCW:
+                rotateLeft.call(srv);
+                break;
+
+            case motor_controller::keyboard::RotateCW:
+                rotateRight.call(srv);
+                break;
+
+            case motor_controller::keyboard::Up:
+                up.call(srv);
+                break;
+
+            case motor_controller::keyboard::Down:
+                down.call(srv);
+                break;
+
+            default:
+                stop.call(srv);
                 break;
                 
             }
