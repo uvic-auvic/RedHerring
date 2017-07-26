@@ -5,6 +5,7 @@ ros/build/
 ros/src/CMakeLists.txt
 ros/src/CMakeLists.txt.*
 ros/*.launch
+ros/src/.vscode/
 
 ## Blender & Gazebo
 *.dae

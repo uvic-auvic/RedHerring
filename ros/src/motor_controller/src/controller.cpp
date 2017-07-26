@@ -11,6 +11,7 @@
 #include <string>
 #include <serial/serial.h>
 #include "motor_controller/motor_command.h"
+#include "system_manager/device_manager.h"
 
 /********************************************************************
  * Defines
@@ -274,9 +275,14 @@ int main(int argc, char ** argv)
     ros::init(argc, argv, "motor_con");
     ros::NodeHandle nh("~");
 
-    // From Launchfile
-    std::string fd_serial_port = "/dev/";
-    setupSerialConnection(fd_serial_port);
+    // From System Manager, get the FD
+    ros::ServiceClient getDeviceName = nh.serviceClient<system_manager::device_manager>("/device_manager/getDeviceFd");
+    std::string sys_name;
+    nh.getParam("system_name", sys_name);
+    system_manager::device_manager srv;
+    srv.request.device = sys_name;
+    getDeviceName.call(srv);
+    setupSerialConnection(srv.response.file_desc);
 
     /* Setup all the Different services/commands which we  can call. Each service does its own error handling */
     ros::ServiceServer setMotorForwardService = nh.advertiseService("setMotorForward", setMotorForward);

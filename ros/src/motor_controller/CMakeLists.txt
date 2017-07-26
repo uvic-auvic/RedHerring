@@ -16,11 +16,13 @@ find_package(catkin REQUIRED
   std_msgs
   message_generation
   serial
+  system_manager
 )
 ## Generate services in the 'srv' folder
 add_service_files(
    FILES
    motor_command.srv
+   movement_command.srv
 )
 
 add_message_files(
@@ -51,13 +53,13 @@ find_package(serial REQUIRED)
 
 ## Declare a C++ executable
 add_executable(controller src/controller.cpp)
-add_dependencies(controller ${motor_controller_EXPORTED_TARGETS})
+add_dependencies(controller ${motor_controller_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS} ${system_manager_EXPORTED_TARGETS})
 target_link_libraries(controller ${catkin_LIBRARIES} ${serial_LIBRARIES})
 
-add_executable(navigation src/navigation.cpp)
-add_dependencies(navigation ${motor_controller_EXPORTED_TARGETS})
-target_link_libraries(navigation ${catkin_LIBRARIES} ${serial_LIBRARIES})
+add_executable(movement src/movement.cpp)
+add_dependencies(movement ${motor_controller_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(movement ${catkin_LIBRARIES} ${serial_LIBRARIES})
 
 add_executable(client src/client.cpp)
-add_dependencies(client ${motor_controller_EXPORTED_TARGETS})
+add_dependencies(client ${motor_controller_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(client ${catkin_LIBRARIES} ${serial_LIBRARIES})

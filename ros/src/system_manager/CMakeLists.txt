@@ -45,6 +45,6 @@ find_package(serial REQUIRED)
 
 ## Declare a C++ executable
 add_executable(device_manager src/device_manager.cpp)
-add_dependencies(device_manager ${system_manager_EXPORTED_TARGETS})
+add_dependencies(device_manager ${system_manager_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(device_manager ${catkin_LIBRARIES} ${serial_LIBRARIES})
 

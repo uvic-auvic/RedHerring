@@ -54,11 +54,12 @@ find_package(OpenCV 2 REQUIRED)
 
 # Separate nodes in the package
 add_executable(sender src/sender.cpp src/webcam.cpp include/video_api.h)
+add_dependencies(sender ${vision_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(sender ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(reciever src/reciever.cpp)
 target_link_libraries(reciever ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
 
 add_executable(colour_detection src/colour_detection.cpp)
-add_dependencies(colour_detection ${vision_EXPORTED_TARGETS})
+add_dependencies(colour_detection ${vision_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(colour_detection ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})

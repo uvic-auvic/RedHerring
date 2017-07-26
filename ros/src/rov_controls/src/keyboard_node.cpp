@@ -54,29 +54,8 @@ int main(int argc, char **argv)
 
         ROS_INFO("Code: %c %x", KB_char, KB_char);
         keyboard_input.direction = KB_char;
-
-        switch(KB_char)
-        {
-        case motor_controller::keyboard::Forward:
-            ROS_INFO("Forward");
-            pub.publish(keyboard_input);
-            break;
-
-        case motor_controller::keyboard::Backward:
-            ROS_INFO("Back");
-            pub.publish(keyboard_input);
-            break;
-
-        case motor_controller::keyboard::left:
-            ROS_INFO("Left");
-            pub.publish(keyboard_input);
-            break;
-
-        case motor_controller::keyboard::right:
-            ROS_INFO("Right");
-            pub.publish(keyboard_input);
-            break;
-        }
+        pub.publish(keyboard_input);
+        
         ros::spinOnce();
     }
 
