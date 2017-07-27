@@ -1,5 +1,5 @@
 <launch>        
-        <include file="$(find system_manager)/launchfiles/device_manager.launch"/>
+        <!--include file="$(find system_manager)/launchfiles/device_manager.launch"/-->
         <include file="$(find motor_controller)/launchfiles/motors.launch"/>
         <include file="$(find motor_controller)/launchfiles/client.launch"/>
         <include file="$(find motor_controller)/launchfiles/movement.launch"/>
