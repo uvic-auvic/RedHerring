@@ -1,3 +1,3 @@
-bool enable_detector
+bool enable
 ---
 bool detector_enabled
