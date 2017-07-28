@@ -64,6 +64,14 @@ int main(int argc, char **argv)
         if (KB_char == motor_controller::keyboard::Forward)
         {
             srv.request.enable = !srv.request.enable;
+            if (srv.request.enable)
+            {
+                ROS_INFO("Reciever is now enabled");
+            } else {
+                ROS_INFO("Reciever is disabled");
+            }
+
+            
             enable.call(srv);
         }
         

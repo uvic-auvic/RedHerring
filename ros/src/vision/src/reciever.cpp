@@ -38,13 +38,12 @@ void imageCallback(const sensor_msgs::ImageConstPtr &msg)
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "image_reciever");
-    ros::NodeHandle nh;
+    ros::NodeHandle nh("~");
     cv::namedWindow("Webcam");
     cv::startWindowThread();
     image_transport::ImageTransport it(nh);
-    image_transport::Subscriber sub;// = it.subscribe("camera/one/image", 5, imageCallback);
+    image_transport::Subscriber sub = it.subscribe("/camera/one/image", 5, imageCallback);
     enableProcessing enabler;
-
     ros::ServiceServer MoveForward = nh.advertiseService("enableProcessing", &enableProcessing::changeStates, &enabler);
 
     while (ros::ok())
@@ -54,10 +53,13 @@ int main(int argc, char **argv)
             enabler.changeState = false;
             if (enabler.enable) 
             {
-                sub = it.subscribe("camera/one/image", 5, imageCallback);
+                cv::namedWindow("Webcam");
+                cv::startWindowThread();
+                sub = it.subscribe("/camera/one/image", 5, imageCallback);
             } else
             {
                 sub.shutdown();
+                cv::destroyWindow("Webcam");
             }
         } 
 
