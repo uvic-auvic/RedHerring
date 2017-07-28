@@ -7,6 +7,7 @@
 #include <ros/console.h>
 #include <string.h>
 #include "motor_controller/keyboard.h"
+#include "vision/enable_detection.h"
 
 //Globals
 int kfd = 0;
@@ -41,6 +42,10 @@ int main(int argc, char **argv)
     motor_controller::keyboard keyboard_input;
     signal(SIGINT, quit);
 
+    ros::ServiceClient enable = nh.serviceClient<vision::enable_detection>("/reciever/enableProcessing");
+    vision::enable_detection srv;
+    srv.request.enable = true;
+
     ROS_INFO("KEYBOARD INPUT NODE ONLINE");    
 
     while(ros::ok())
@@ -55,6 +60,12 @@ int main(int argc, char **argv)
         ROS_INFO("Code: %c %x", KB_char, KB_char);
         keyboard_input.direction = KB_char;
         pub.publish(keyboard_input);
+
+        if (KB_char == motor_controller::keyboard::Forward)
+        {
+            srv.request.enable = !srv.request.enable;
+            enable.call(srv);
+        }
         
         ros::spinOnce();
     }
