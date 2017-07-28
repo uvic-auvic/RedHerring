@@ -31,7 +31,7 @@ void colour_detection(const sensor_msgs::ImageConstPtr& msg)
 
 bool enableDetection(vision::enable_detection::Request &req, vision::enable_detection::Response &res) {
     
-    perform_detection = req.enable_detector;
+    perform_detection = req.enable;
     res.detector_enabled = true;
     return res.detector_enabled;
 }

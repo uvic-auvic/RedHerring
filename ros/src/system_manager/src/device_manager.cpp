@@ -71,7 +71,7 @@ int main(int argc, char ** argv) {
     while ((pdirent = readdir(pd)) != NULL) {
         std::string fd(pdirent->d_name);
         if (fd.find("ttyUSB") == 0) {
-            getNameOfDevice(fd);
+            getNameOfDevice("/dev/" + fd);
         }
     }
     closedir(pd);

@@ -28,5 +28,5 @@ target_link_libraries(joystick_node ${catkin_LIBRARIES})
 
 add_executable(keyboard_node src/keyboard_node.cpp)
 target_link_libraries(keyboard_node ${catkin_LIBRARIES})
-add_dependencies(keyboard_node ${motor_controller_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(keyboard_node ${vision_EXPORTED_TARGETS} ${motor_controller_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 

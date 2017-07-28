@@ -12,19 +12,8 @@
 #include <cv_bridge/cv_bridge.h>
 #include <ros/ros.h>
 #include <string>
-
 #include "../include/video_api.h"
-#include "vision/webcam.h"
 
-VideoSource source;
-
-bool record_video(vision::webcam::Request &req, vision::webcam::Response &res) {
-    source.initOutFile();
-    if (!source.video.isOpened()) {
-        ROS_ERROR("Coudn't open video file for writing");
-    }
-    return true;
-}
 
 /*************************************************************
  * Implementation [Image Sender]
@@ -40,7 +29,7 @@ int main (int argc, char ** argv)
     nh.getParam("fd", fd);
     nh.getParam("pub", pub);
     image_transport::Publisher publisher = it.advertise(pub, 5);
-
+    VideoSource source;
 
     if (!source.SetSource(fd)) {
         ROS_ERROR("%s failed to open device on %s", name.c_str(), fd.c_str());
@@ -48,7 +37,6 @@ int main (int argc, char ** argv)
     }
 
     ros::Rate loop_rate(source.GetFPS());
-    ros::ServiceServer recordMode = nh.advertiseService("record", record_video);
 
     while(nh.ok())
     {
