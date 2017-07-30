@@ -6,10 +6,16 @@ find_package(catkin REQUIRED
   roscpp
   rospy
   std_msgs
+  message_runtime
+  motor_controller
   )
 
+include_directories(
+  ${catkin_INCLUDE_DIRS}
+)
+
 catkin_package(
-   CATKIN_DEPENDS message_runtime std_msgs
+   CATKIN_DEPENDS std_msgs roscpp message_runtime
 )
 
 ## Declare a C++ executable

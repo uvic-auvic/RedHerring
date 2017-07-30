@@ -2,6 +2,8 @@
 #include "motor_controller/position.h"
 #include "vision/enable_detection.h"
 
+using object_position = motor_controller::position;
+
 class ai_handler 
 {
 public:
@@ -15,13 +17,13 @@ public:
         return this->updated;
     }
 
-    void updatePosition(const motor_controller::position pos)
+    void updatePosition(const object_position pos)
     {
         updated = true;
         this->pos = pos;
     }
 
-    motor_controller::position getPosition()
+    object_position getPosition()
     {
         this->updated = false;
         return this->pos;
@@ -29,7 +31,7 @@ public:
 
 private:
     bool updated;
-    motor_controller::position pos;
+    object_position pos;
 
 };
 
