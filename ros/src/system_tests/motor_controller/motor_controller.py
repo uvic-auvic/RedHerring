@@ -1,10 +1,10 @@
-from emulator import DeviceEmulator
+from .. import emulator
 
 class motor_controller():
     def __init__(self):
-        self.dev = DeviceEmulator()
+        self.dev = emulator.DeviceEmulator()
 
-    def start(self)
+    def start(self):
         while True:
             data = self.dev.read().strip()
             if data.startswith('M'):
