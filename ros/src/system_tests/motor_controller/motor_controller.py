@@ -1,28 +1,35 @@
-from .. import emulator
+from emulator import DeviceEmulator
+import imp
+import os
 
 class motor_controller():
     def __init__(self):
-        self.dev = emulator.DeviceEmulator()
+        self.dev = DeviceEmulator()
 
     def start(self):
-        while True:
-            data = self.dev.read().strip()
-            if data.startswith('M'):
-                self.move(data)
-            elif data.startswith('STP'):
-                self.stop(data)
-            elif data.startswith('SM'):
-                self.stop(data)
-            elif data.startswith('RV'):
-                self.revolutions(data)
-            elif data.startswith('PW'):
-                self.pwm(data)
-            elif data.startswith('RID'):
-                self.rid(data)
-            elif data.startswith('TMP'):
-                self.temperature(data)
-            else:
-                pass
+        i = 0
+        while i < 10:
+            print i
+            i += 1
+
+        # while True:
+        #     data = self.dev.read().strip()
+        #     if data.startswith('M'):
+        #         self.move(data)
+        #     elif data.startswith('STP'):
+        #         self.stop(data)
+        #     elif data.startswith('SM'):
+        #         self.stop(data)
+        #     elif data.startswith('RV'):
+        #         self.revolutions(data)
+        #     elif data.startswith('PW'):
+        #         self.pwm(data)
+        #     elif data.startswith('RID'):
+        #         self.rid(data)
+        #     elif data.startswith('TMP'):
+        #         self.temperature(data)
+        #     else:
+        #         pass
 
 
     def move(self, cmd):
@@ -46,4 +53,7 @@ class motor_controller():
     def temperature(self, data):
         pass
 
-    
+
+if __name__ == '__main__':
+    a = motor_controller()
+    a.start()

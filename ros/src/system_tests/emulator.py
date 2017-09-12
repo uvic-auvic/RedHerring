@@ -1,12 +1,10 @@
-
 import pty
 import os
 
-class DeviceEmulator:
+class DeviceEmulator(object):
     def __init__(self):
         self.master, slave = pty.openpty()
         self.port = os.ttyname(slave)
-        os.write(master, 'con\n')
 
     def write(self, data):
         os.write(self.master, data)
