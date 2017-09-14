@@ -14,3 +14,6 @@ class DeviceEmulator(object):
         while not data: # block
             data = os.read(self.master, buffer)
         return data
+
+    def getPort(self):
+        return self.port

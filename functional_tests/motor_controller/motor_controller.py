@@ -6,30 +6,28 @@ class motor_controller():
     def __init__(self):
         self.dev = DeviceEmulator()
 
-    def start(self):
-        i = 0
-        while i < 10:
-            print i
-            i += 1
+    def getPort(self):
+        return self.dev.getPort()
 
-        # while True:
-        #     data = self.dev.read().strip()
-        #     if data.startswith('M'):
-        #         self.move(data)
-        #     elif data.startswith('STP'):
-        #         self.stop(data)
-        #     elif data.startswith('SM'):
-        #         self.stop(data)
-        #     elif data.startswith('RV'):
-        #         self.revolutions(data)
-        #     elif data.startswith('PW'):
-        #         self.pwm(data)
-        #     elif data.startswith('RID'):
-        #         self.rid(data)
-        #     elif data.startswith('TMP'):
-        #         self.temperature(data)
-        #     else:
-        #         pass
+    def start(self):
+        while True:
+            data = self.dev.read().strip()
+            if data.startswith('M'):
+                self.move(data)
+            elif data.startswith('STP'):
+                self.stop(data)
+            elif data.startswith('SM'):
+                self.stop(data)
+            elif data.startswith('RV'):
+                self.revolutions(data)
+            elif data.startswith('PW'):
+                self.pwm(data)
+            elif data.startswith('RID'):
+                self.rid(data)
+            elif data.startswith('TMP'):
+                self.temperature(data)
+            else:
+                pass
 
 
     def move(self, cmd):

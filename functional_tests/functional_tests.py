@@ -24,9 +24,10 @@ class StreamWriter:
         pass
 
 
-def process_handler(stdoutQueue, device_class):
+def process_handler(device_class, stdoutQueue, portsQueue):
     sys.stdout = StreamWriter(stdoutQueue)
     a = device_class()
+    portsQueue.put((device_class, a.getPort()))
     a.start()
 
 
@@ -34,7 +35,8 @@ class ProcessManager:
     def __init__(self):
         self.manager = multiprocessing.Manager()
         self.stdout = self.manager.Queue()
-        self.get_process_list()
+        self.ports = self.manager.Queue()
+        self.get_devices_list()
     
     def get_device_class(self):
         warnings.filterwarnings('error') # So that we can catch runtime warnings
@@ -48,33 +50,59 @@ class ProcessManager:
                 module = importlib.import_module(module_name)
             except RuntimeWarning, e:
                 raise FunctionalTestError(e.args[0])
-            device_class = getattr(module, device)
-            yield device_class
+            yield getattr(module, device)
                 
-    def get_process_list(self):
-        self.processes = []
+    def get_devices_list(self):
+        self.devices = {}
         for device in self.get_device_class():
-            self.processes.append(device)
-        self.unfinished_processes = len(self.processes)
+            self.devices[device] = None
+        self.unfinished_processes = len(self.devices)
 
     def process_finished(self, results):
         if self.unfinished_processes > 0:
             self.unfinished_processes -= 1
 
-    def start(self):
-        self.pool = multiprocessing.Pool(processes=len(self.processes))
-        workers = [self.pool.apply_async(process_handler, args=(self.stdout, process), callback=self.process_finished) for process in self.processes]
+    def waiting_for_all_devices(self):
+        for device_port in self.devices.itervalues():
+            if device_port is None:
+                return True
+        return False
+
+    def wait_for_device_init(self):
+        while self.waiting_for_all_devices():
+            try:
+                device, port = self.ports.get_nowait()
+                self.devices[device] = port
+            except Queue.Empty:
+                pass
+        print self.devices   
+        
+
+    def start_print_loop(self):
+        """Just loops and prints anything placed in the shared queue"""
         while self.unfinished_processes > 0:
             try:
                 print self.stdout.get_nowait()
             except Queue.Empty:
                 pass
-        self.pool.close()
-        while True: # Clean up anything left in the buffer after the process has ended
+        # Should only get here if all our workers have finished working
+        # Which is never the case, so should never get here
+        self.pool.close() 
+
+    def empty_print_buffer(self):
+        """Clean up anything left in the buffer after the process has ended"""
+        while True:
             try:
                 print self.stdout.get_nowait()
             except Queue.Empty:
                 break
+
+    def start(self):
+        self.pool = multiprocessing.Pool(processes=len(self.devices))        
+        workers = [self.pool.apply_async(process_handler, args=(device, self.stdout, self.ports), callback=self.process_finished) for device in self.devices]
+        self.wait_for_device_init()
+        self.start_print_loop() # In most cases, we will never break out of here
+        self.empty_print_buffer()
         self.pool.join()
 
     def terminate(self):
