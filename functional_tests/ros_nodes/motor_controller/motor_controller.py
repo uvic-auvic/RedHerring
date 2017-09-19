@@ -29,7 +29,6 @@ class motor_controller():
             else:
                 pass
 
-
     def move(self, cmd):
         pass
 

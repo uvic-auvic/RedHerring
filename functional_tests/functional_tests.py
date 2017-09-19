@@ -38,20 +38,21 @@ class ProcessManager:
         self.ports = self.manager.Queue()
         self.get_devices_list()
     
-    def get_device_class(self):
+    def get_device_class(self, ros_node_directory = 'ros_nodes'):
         warnings.filterwarnings('error') # So that we can catch runtime warnings
         directory = os.path.dirname(os.path.abspath(__file__))
-        full_path_contents = [os.path.join(directory, x) for x in os.listdir(directory)]
+        node_directory = os.path.join(directory, ros_node_directory)
+        full_path_contents = [os.path.join(node_directory, x) for x in os.listdir(node_directory)]
         device_folders = [x for x in full_path_contents if os.path.isdir(x)]
         for dev_dir in device_folders:
             device = os.path.basename(os.path.normpath(dev_dir))
-            module_name = '{0}.{0}'.format(device)
+            module_name = '{0}.{1}.{1}'.format(ros_node_directory, device)
             try:
                 module = importlib.import_module(module_name)
             except RuntimeWarning, e:
                 raise FunctionalTestError(e.args[0])
-            yield getattr(module, device)
-                
+            yield getattr(module, device) # Will only work if the class name is same as the directory
+
     def get_devices_list(self):
         self.devices = {}
         for device in self.get_device_class():
@@ -74,10 +75,8 @@ class ProcessManager:
                 device, port = self.ports.get_nowait()
                 self.devices[device] = port
             except Queue.Empty:
-                pass
-        print self.devices   
+                pass  
         
-
     def start_print_loop(self):
         """Just loops and prints anything placed in the shared queue"""
         while self.unfinished_processes > 0:
@@ -90,7 +89,7 @@ class ProcessManager:
         self.pool.close() 
 
     def empty_print_buffer(self):
-        """Clean up anything left in the buffer after the process has ended"""
+        """Clean up anything left in the buffer after all processes have ended"""
         while True:
             try:
                 print self.stdout.get_nowait()
