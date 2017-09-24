@@ -10,3 +10,10 @@ ros/.vscode/
 
 ## Blender & Gazebo
 *.dae
+
+## Python
+*.pyc
+*.pyo
+
+## Configs
+.vscode

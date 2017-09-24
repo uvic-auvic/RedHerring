@@ -1,0 +1,6 @@
+<launch>        
+        <!--Motors-->
+        <include file="$(find motor_controller)/launchfiles/motor_controller.launch">
+          <arg name="" value="{motor_controller}"/>
+        </include>
+</launch>
