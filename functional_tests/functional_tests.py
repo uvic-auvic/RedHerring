@@ -24,10 +24,10 @@ class StreamWriter:
         pass
 
 
-def process_handler(device_class, stdoutQueue, portsQueue):
+def process_handler(device_class, stdoutQueue, paramQueue):
     sys.stdout = StreamWriter(stdoutQueue)
     a = device_class()
-    portsQueue.put((device_class, a.getPort()))
+    paramQueue.put((device_class, a.getParameters()))
     a.start()
 
 
@@ -35,7 +35,7 @@ class ProcessManager:
     def __init__(self):
         self.manager = multiprocessing.Manager()
         self.stdout = self.manager.Queue()
-        self.ports = self.manager.Queue()
+        self.params = self.manager.Queue()
         self.get_devices_list()
     
     def get_device_class(self, ros_node_directory = 'ros_nodes'):
@@ -64,16 +64,16 @@ class ProcessManager:
             self.unfinished_processes -= 1
 
     def waiting_for_all_devices(self):
-        for device_port in self.devices.itervalues():
-            if device_port is None:
+        for device_param in self.devices.itervalues():
+            if device_param is None:
                 return True
         return False
 
     def wait_for_device_init(self):
         while self.waiting_for_all_devices():
             try:
-                device, port = self.ports.get_nowait()
-                self.devices[device] = port
+                device, params = self.params.get_nowait()
+                self.devices[device] = params
             except Queue.Empty:
                 pass  
         
@@ -98,7 +98,7 @@ class ProcessManager:
 
     def start(self):
         self.pool = multiprocessing.Pool(processes=len(self.devices))        
-        workers = [self.pool.apply_async(process_handler, args=(device, self.stdout, self.ports), callback=self.process_finished) for device in self.devices]
+        workers = [self.pool.apply_async(process_handler, args=(device, self.stdout, self.params), callback=self.process_finished) for device in self.devices]
         self.wait_for_device_init()
         self.start_print_loop() # In most cases, we will never break out of here
         self.empty_print_buffer()

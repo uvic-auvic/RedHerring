@@ -6,10 +6,13 @@ class motor_controller():
     def __init__(self):
         self.dev = DeviceEmulator()
 
-    def getPort(self):
-        return self.dev.getPort()
+    def getParameters(self):
+        return {
+            'port': self.dev.getPort()
+        }
 
     def start(self):
+        i = 0
         while True:
             data = self.dev.read().strip()
             if data.startswith('M'):
