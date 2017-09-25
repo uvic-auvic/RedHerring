@@ -1,17 +1,13 @@
-<launch>        
-        <!-- Motor Controller Node -->
-
+<launch>       
         <!-- Arguments (Overrideable)-->
-        <arg name="MotorForwardService" default="setMotorForward"/>
-
+        <arg name="left_port" default="/dev/ttyUSB0"/>
+        <arg name="right_port" default="/dev/ttyUSB1"/>
+        <!--Nodes-->
         <node name="motor_left" pkg="motor_controller" type="controller" required="true">
-          <param name="system_name" value="MOTOR_LEFT"/>
-          <param name="motor_port" value="/dev/ttyUSB0"/>
+          <param name="motor_port" value="$(left_port)"/>
         </node>
-
         <node name="motor_right" pkg="motor_controller" type="controller" required="true">
-          <param name="system_name" value="MOTOR_RIGHT"/>
-          <param name="motor_port" value="/dev/ttyUSB1"/>
+          <param name="motor_port" value="$(right_port)"/>
         </node>
 
 </launch>

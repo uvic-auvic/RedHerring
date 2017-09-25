@@ -1,10 +1,11 @@
 from emulator import DeviceEmulator
-import imp
+# import imp
 import os
 
 class motor_controller():
     def __init__(self):
         self.dev = DeviceEmulator()
+        pass
 
     def getParameters(self):
         return {
