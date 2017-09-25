@@ -1,5 +1,6 @@
 from time import sleep
 import multiprocessing
+from roslauncher import Roslauncher
 import warnings
 import imp
 import importlib
@@ -30,7 +31,6 @@ def process_handler(device_class, stdoutQueue, paramQueue):
     paramQueue.put((device_class, a.getParameters()))
     a.start()
 
-
 class ProcessManager:
     def __init__(self):
         self.manager = multiprocessing.Manager()
@@ -47,6 +47,8 @@ class ProcessManager:
         for dev_dir in device_folders:
             device = os.path.basename(os.path.normpath(dev_dir))
             module_name = '{0}.{1}.{1}'.format(ros_node_directory, device)
+            if device != 'motor_controller':
+                continue
             try:
                 module = importlib.import_module(module_name)
             except RuntimeWarning, e:
@@ -63,19 +65,24 @@ class ProcessManager:
         if self.unfinished_processes > 0:
             self.unfinished_processes -= 1
 
-    def waiting_for_all_devices(self):
+    def still_waiting_for_device(self):
         for device_param in self.devices.itervalues():
             if device_param is None:
                 return True
         return False
 
+    def update_dict(self, prefix, params):
+        updated_dict = {}
+        for key, value in params.iteritems():
+            updated_dict['{0}_{1}'.format(prefix, key)] = value
+        return updated_dict
+
     def wait_for_device_init(self):
-        while self.waiting_for_all_devices():
-            try:
-                device, params = self.params.get_nowait()
-                self.devices[device] = params
-            except Queue.Empty:
-                pass  
+        while self.still_waiting_for_device():
+            device, params = self.params.get()
+            prefix = device.__name__
+            self.devices[device] = self.update_dict(prefix, params)
+
         
     def start_print_loop(self):
         """Just loops and prints anything placed in the shared queue"""
@@ -84,9 +91,6 @@ class ProcessManager:
                 print self.stdout.get_nowait()
             except Queue.Empty:
                 pass
-        # Should only get here if all our workers have finished working
-        # Which is never the case, so should never get here
-        self.pool.close() 
 
     def empty_print_buffer(self):
         """Clean up anything left in the buffer after all processes have ended"""
@@ -98,21 +102,32 @@ class ProcessManager:
 
     def start(self):
         self.pool = multiprocessing.Pool(processes=len(self.devices))        
-        workers = [self.pool.apply_async(process_handler, args=(device, self.stdout, self.params), callback=self.process_finished) for device in self.devices]
+        self.workers = [self.pool.apply_async(process_handler, args=(device, self.stdout, self.params), callback=self.process_finished) for device in self.devices]
         self.wait_for_device_init()
-        self.start_print_loop() # In most cases, we will never break out of here
-        self.empty_print_buffer()
+        self.pool.close()
+        # self.start_print_loop()
+        # self.empty_print_buffer()
+        # self.pool.join()
+
+    def join(self):
         self.pool.join()
 
     def terminate(self):
-        if self.pool:
-            self.pool.terminate()
-            self.pool.join()
+        self.pool.terminate()
 
+
+def merge_dict(params):
+    merged_dict = {}
+    for device_params in params.itervalues():
+        merged_dict.update(device_params)
+    return merged_dict
 
 if __name__ == '__main__':
     manager = ProcessManager()
-    try:
-        manager.start()
-    except KeyboardInterrupt:
-        manager.terminate()   
+    manager.start()
+    named_parameters = merge_dict(manager.devices)
+    print named_parameters
+    raise SystemExit
+    launcher = Roslauncher(named_parameters)
+    while True:
+        pass

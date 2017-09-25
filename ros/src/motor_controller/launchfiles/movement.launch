@@ -1,6 +1,4 @@
 <launch>        
-        <!-- Movement Node -->
-
         <!-- Arguments (Overrideable)-->
         <arg name="reverse_multiplier" default="0.80"/>
         <arg name="default_power" default="100"/>
